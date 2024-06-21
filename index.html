@@ -28,10 +28,13 @@
         form {
             margin-top: 20px;
         }
+        table {
+            width: 100%; /* Full-width table */
+            margin-bottom: 20px; /* Space below the table */
+        }
         input, select, button {
-            width: 100%; /* Full-width form elements */
             padding: 10px;
-            margin-top: 10px; /* Adds space between form elements */
+            margin-top: 5px; /* Adds space between form elements */
             box-sizing: border-box; /* Includes padding in width calculation */
         }
         button {
@@ -42,6 +45,10 @@
         }
         button:hover {
             background-color: #004494; /* Darker blue on hover */
+        }
+        th, td {
+            padding: 10px; /* Padding in table cells */
+            text-align: left; /* Align text to the left in table cells */
         }
     </style>
 </head>
@@ -59,8 +66,50 @@
         <form action="https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec" method="POST">
             <input type="email" name="Email" placeholder="Email" required>
             <input type="text" name="Name" placeholder="Name" required>
+            <!-- Expandable Table -->
+            <table id="assetTable">
+                <thead>
+                    <tr>
+                        <th>Four Digit Label</th>
+                        <th>Asset Type</th>
+                        <th>Total Number of Spaces</th>
+                        <th>ADA</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" name="label[]" required></td>
+                        <td>
+                            <select name="assetType[]">
+                                <option value="Garage">Garage</option>
+                                <option value="Surface Lot">Surface Lot</option>
+                            </select>
+                        </td>
+                        <td><input type="number" name="spaces[]" required></td>
+                        <td><input type="checkbox" name="ada[]"></td>
+                        <td><button type="button" onclick="addRow()">Add Row</button></td>
+                    </tr>
+                </tbody>
+            </table>
             <button type="submit">Send</button>
         </form>
     </div>
+    <script>
+        function addRow() {
+            var table = document.getElementById("assetTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow(table.rows.length);
+            newRow.innerHTML = '<td><input type="text" name="label[]" required></td>' +
+                               '<td><select name="assetType[]"><option value="Garage">Garage</option><option value="Surface Lot">Surface Lot</option></select></td>' +
+                               '<td><input type="number" name="spaces[]" required></td>' +
+                               '<td><input type="checkbox" name="ada[]"></td>' +
+                               '<td><button type="button" onclick="removeRow(this)">Remove</button></td>';
+        }
+        function removeRow(button) {
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
 </body>
 </html>
+
