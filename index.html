@@ -9,23 +9,51 @@
     <form id="dataForm" action="https://script.google.com/macros/s/AKfycbyeh5YGe-wQUDuWjufvZU3O3dwIL9DbddggidVYf9Yh6yTBQDF2YXt0XoTPvrEdhgheww/exec" method="POST">
         <label for="uuid">UUID:</label>
         <input type="text" id="uuid" name="uuid" required><br><br>
-
         <label for="code">Four-Digit Code:</label>
         <input type="number" id="code" name="code" required><br><br>
-
         <label for="assetType">Asset Type:</label>
         <select id="assetType" name="assetType" required>
             <option value="Surface Lot">Surface Lot</option>
             <option value="Garage">Garage</option>
         </select><br><br>
-
         <label for="totalSpaces">Total Number of Spaces:</label>
         <input type="number" id="totalSpaces" name="totalSpaces" required><br><br>
-
         <button type="submit">Submit</button>
     </form>
 
     <h2>Map</h2>
     <iframe src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74507%2C-105.0044%2C13.87z&legend=1&logo=1&link=1" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            
+            const form = this;
+            const formData = new FormData(form);
+            const data = {};
+
+            for (const [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            fetch(form.action, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+                alert('Form submitted successfully!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Submission failed');
+            });
+        });
+    </script>
+
 </body>
 </html>
