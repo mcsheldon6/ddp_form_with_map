@@ -29,27 +29,39 @@
         <button type="submit">Submit</button>
     </form>
 
-    <script>
-        function handleSubmit(event) {
-            event.preventDefault();
-            const form = document.getElementById('dataForm');
-            const formData = new FormData(form);
-            const data = {};
-            for (const [key, value] of formData.entries()) {
-                data[key] = value;
-            }
+  <script>
+function handleSubmit(event) {
+    event.preventDefault();
+    const form = document.getElementById('dataForm');
+    const formData = new FormData(form);
+    const data = {};
+    for (const [key, value] of formData.entries()) {
+        data[key] = value;
+    }
 
-            fetch('https://script.google.com/macros/s/AKfycbzLidRNB9ZG6iA0gGNkWQ094vX5boRtT8s5_1f9CaK0jzfJxCHfnrGOKquCMZLP4nq1sg/exec', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => alert('Data submitted successfully!'))
-            .catch(error => alert('Submission failed: ' + error.message));
+    fetch('https://script.google.com/macros/s/AKfycbzLidRNB9ZG6iA0gGNkWQ094vX5boRtT8s5_1f9CaK0jzfJxCHfnrGOKquCMZLP4nq1sg/exec', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
         }
-    </script>
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Data submitted successfully!');
+        console.log('Success:', data);
+    })
+    .catch(error => {
+        console.error('Submission failed:', error);
+        alert('Submission failed: ' + error.message);
+    });
+}
+</script>
+
 </body>
 </html>
