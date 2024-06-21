@@ -1,82 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Asset Data Collection</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-    <h1>Asset Data Collection</h1>
-    <form id="dataForm">
-        <table id="dataTable">
-            <thead>
-                <tr>
-                    <th>UUID</th>
-                    <th>Four-Digit Code</th>
-                    <th>Asset Type</th>
-                    <th>Total Number of Spaces</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" name="uuid[]"></td>
-                    <td><input type="text" name="code[]"></td>
-                    <td>
-                        <select name="assetType[]">
-                            <option value="Garage">Garage</option>
-                            <option value="Surface Lot">Surface Lot</option>
-                        </select>
-                    </td>
-                    <td><input type="number" name="totalSpaces[]"></td>
-                </tr>
-            </tbody>
-        </table>
-        <button type="button" onclick="addRow()">Add Another Row</button>
+    <h1>Test Form Submission</h1>
+    <form action="https://script.google.com/macros/s/AKfycbzLidRNB9ZG6iA0gGNkWQ094vX5boRtT8s5_1f9CaK0jzfJxCHfnrGOKquCMZLP4nq1sg/exec">
+    <form id="dataForm" action="https://script.google.com/macros/s/AKfycbzLidRNB9ZG6iA0gGNkWQ094vX5boRtT8s5_1f9CaK0jzfJxCHfnrGOKquCMZLP4nq1sg/exec" method="POST">
+        <label for="testData">Test Data:</label>
+        <input type="text" id="testData" name="testData" value="Hello World" required>
         <button type="submit">Submit</button>
     </form>
-
-    <script>
-        function addRow() {
-            var table = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
-            var newRow = table.insertRow(table.rows.length);
-            var cell1 = newRow.insertCell(0);
-            var cell2 = newRow.insertCell(1);
-            var cell3 = newRow.insertCell(2);
-            var cell4 = newRow.insertCell(3);
-            cell1.innerHTML = '<input type="text" name="uuid[]">';
-            cell2.innerHTML = '<input type="text" name="code[]">';
-            cell3.innerHTML = '<select name="assetType[]"><option value="Garage">Garage</option><option value="Surface Lot">Surface Lot</option></select>';
-            cell4.innerHTML = '<input type="number" name="totalSpaces[]">';
-        }
-
-        document.getElementById('dataForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            const data = {};
-            for (const [key, value] of formData.entries()) {
-                if (!data[key]) {
-                    data[key] = [];
-                }
-                data[key].push(value);
-            }
-
-            fetch('https://script.google.com/macros/s/AKfycbzLidRNB9ZG6iA0gGNkWQ094vX5boRtT8s5_1f9CaK0jzfJxCHfnrGOKquCMZLP4nq1sg/exec', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(result => {
-                alert('Form submitted successfully!');
-                console.log('Success:', result);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Submission failed: ' + error.message);
-            });
-        });
-    </script>
 </body>
 </html>
