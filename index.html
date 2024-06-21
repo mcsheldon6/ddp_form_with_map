@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Denver Parking Survey</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures proper scaling on mobile devices -->
     <style>
         body {
             font-family: Arial, sans-serif; /* Sets the font for the page */
@@ -16,9 +17,11 @@
             padding: 20px;
             background: white; /* White background for the content */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow around the container */
+            width: 90%; /* Responsive width */
         }
         .map-container {
             margin: 20px -20px; /* Adds negative margin to counteract the padding in the container */
+            overflow: hidden; /* Prevents content from overflowing */
         }
         iframe {
             width: 100%;
@@ -43,6 +46,16 @@
         button:hover {
             background-color: #004494; /* Darker blue on hover */
         }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            iframe {
+                height: 300px; /* Smaller height on smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
@@ -64,3 +77,4 @@
     </div>
 </body>
 </html>
+
