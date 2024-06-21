@@ -2,61 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Form with Map</title>
+    <title>Simple Form Submission</title>
 </head>
 <body>
-    <h1>Interactive Form with Map</h1>
-<form id="dataForm" action="https://script.google.com/macros/s/AKfycbwcCHGgNEOYqxNuf2N2OIqVTsMBBYAewmvH-OjWn5Edjj85T1b2rbJC8z5mYNAFURiyBA/exec" method="POST">
-        <label for="uuid">UUID:</label>
-        <input type="text" id="uuid" name="uuid" required><br><br>
-        <label for="code">Four-Digit Code:</label>
-        <input type="number" id="code" name="code" required><br><br>
-        <label for="assetType">Asset Type:</label>
-        <select id="assetType" name="assetType" required>
-            <option value="Surface Lot">Surface Lot</option>
-            <option value="Garage">Garage</option>
-        </select><br><br>
-        <label for="totalSpaces">Total Number of Spaces:</label>
-        <input type="number" id="totalSpaces" name="totalSpaces" required><br><br>
+    <h1>Test Form Submission</h1>
+    <form action="https://script.google.com/macros/s/AKfycbzLidRNB9ZG6iA0gGNkWQ094vX5boRtT8s5_1f9CaK0jzfJxCHfnrGOKquCMZLP4nq1sg/exec">
+        <label for="testData">Test Data:</label>
+        <input type="text" id="testData" name="testData" value="Hello World" required>
         <button type="submit">Submit</button>
     </form>
-
-    <h2>Map</h2>
-    <iframe src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74507%2C-105.0044%2C13.87z&legend=1&logo=1&link=1" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    
- <script>
-document.getElementById('dataForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-
-    const formData = new FormData(this);
-    const data = {};
-
-    for (const [key, value] of formData.entries()) {
-        data[key] = value;
-    }
-
-    console.log('Data to be sent:', JSON.stringify(data)); // Log the data to be sent
-
-    fetch(this.action, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log('Success:', result);
-        alert('Form submitted successfully!');
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Submission failed: ' + error.message);
-    });
-});
-</script>
-
-
-
 </body>
 </html>
+
