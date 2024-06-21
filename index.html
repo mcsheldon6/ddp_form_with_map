@@ -26,17 +26,13 @@
     
    <script>
 document.getElementById('dataForm').addEventListener('submit', function(event) {
-    event.preventDefault();  // Prevent the default form submission behavior
-    
-    const form = this;
-    const formData = new FormData(form);
+    event.preventDefault();
+
+    const formData = new FormData(this);
     const data = {};
+    formData.forEach((value, key) => { data[key] = value; });
 
-    for (const [key, value] of formData.entries()) {
-        data[key] = value;
-    }
-
-    fetch(form.action, {
+    fetch(this.action, {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -44,13 +40,19 @@ document.getElementById('dataForm').addEventListener('submit', function(event) {
         }
     })
     .then(response => response.json())
-    .then(result => {
-        console.log(result);  // Log result to console
-        alert('Form submitted successfully!');
+    .then(data => {
+        if (data.result === 'success') {
+            alert('Form submitted successfully!');
+        } else {
+            throw new Error(data.message);
+        }
     })
     .catch(error => {
-        console.error('Error:', error);  // Log errors to console
-        alert('Submission failed');
+        console.error('Submission failed', error);
+        alert('Submission failed: ' + error.message);
+    });
+});
+
     });
 });
 </script>
