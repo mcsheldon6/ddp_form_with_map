@@ -1,48 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
-    span.s1 {font-kerning: none}
-  </style>
+    <meta charset="UTF-8">
+    <title>Interactive Form with Map</title>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="en"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;Interactive Form with Map&lt;/title&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Interactive Form with Map&lt;/h1&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;form id="dataForm" action="https://script.google.com/macros/s/1trC_PY8NpMO8-A9RgeiNszNrMU4Ml5nqDcdK9nIw_KH0XHhRnwk5iZtR//exec" method="POST"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;label for="uuid"&gt;UUID:&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;input type="text" id="uuid" name="uuid" required&gt;&lt;br&gt;&lt;br&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;label for="code"&gt;Four-Digit Code:&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;input type="number" id="code" name="code" required&gt;&lt;br&gt;&lt;br&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;label for="assetType"&gt;Asset Type:&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;select id="assetType" name="assetType" required&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value="Surface Lot"&gt;Surface Lot&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value="Garage"&gt;Garage&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/select&gt;&lt;br&gt;&lt;br&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;label for="totalSpaces"&gt;Total Number of Spaces:&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;input type="number" id="totalSpaces" name="totalSpaces" required&gt;&lt;br&gt;&lt;br&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;button type="submit"&gt;Submit&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/form&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h2&gt;Map&lt;/h2&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;iframe src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74507%2C-105.0044%2C13.87z&amp;legend=1&amp;logo=1&amp;link=1" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"&gt;&lt;/iframe&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+    <h1>Interactive Form with Map</h1>
+    <form id="dataForm" action="https://script.google.com/macros/s/1trC_PY8NpMO8-A9RgeiNszNrMU4Ml5nqDcdK9nIw_KH0XHhRnwk5iZtR/exec" method="POST">
+        <label for="uuid">UUID:</label>
+        <input type="text" id="uuid" name="uuid" required><br><br>
+
+        <label for="code">Four-Digit Code:</label>
+        <input type="number" id="code" name="code" required><br><br>
+
+        <label for="assetType">Asset Type:</label>
+        <select id="assetType" name="assetType" required>
+            <option value="Surface Lot">Surface Lot</option>
+            <option value="Garage">Garage</option>
+        </select><br><br>
+
+        <label for="totalSpaces">Total Number of Spaces:</label>
+        <input type="number" id="totalSpaces" name="totalSpaces" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Map</h2>
+    <iframe src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74507%2C-105.0044%2C13.87z&legend=1&logo=1&link=1" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 </body>
 </html>
