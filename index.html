@@ -60,7 +60,7 @@
             cell3.innerHTML = '<input type="tel" name="Phone">';
         }
 
-        function handleSubmit(event) {
+        async function handleSubmit(event) {
             event.preventDefault();
             var formData = [];
             var table = document.getElementById("dataTable");
@@ -71,18 +71,24 @@
                 formData.push({ Email: email, Name: name, Phone: phone });
             }
 
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(JSON.stringify(formData));
+            try {
+                const response = await fetch("https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
 
-            xhr.onload = function() {
-                if (xhr.status == 200) {
+                if (response.ok) {
                     alert("Data sent successfully!");
                 } else {
                     alert("Error sending data.");
                 }
-            };
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error sending data.");
+            }
         }
     </script>
 </head>
