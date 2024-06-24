@@ -147,10 +147,13 @@ function toggleDropdown(event, dropdownId) {
 
 function toggleOption(element) {
     element.classList.toggle('checked');
-    // Reflect selected options in button value
+    // Reflect selected option indices in button value
     var parentDropdown = element.closest('.dropdown-content');
-    var selectedOptions = Array.from(parentDropdown.querySelectorAll('.checked')).map(opt => opt.getAttribute('data-value'));
-    parentDropdown.previousElementSibling.value = selectedOptions.join(', ');
+    var options = Array.from(parentDropdown.children); // Get all dropdown options as an array
+    var selectedIndices = options.filter(opt => opt.classList.contains('checked')) // Filter to only checked options
+                                 .map(opt => options.indexOf(opt) + 1) // Get the 1-based index of each checked option
+                                 .join(', '); // Join indices with commas
+    parentDropdown.previousElementSibling.value = selectedIndices; // Set indices as the value of the button
 }
 
 document.body.addEventListener('click', function(event) {
