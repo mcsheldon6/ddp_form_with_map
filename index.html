@@ -126,16 +126,21 @@ function handleSubmit() {
 
 function toggleDropdown(event, dropdownId) {
     event.stopPropagation(); // Stop propagation to prevent immediate closing
+
     var dropdown = document.getElementById(dropdownId);
     var isClosed = dropdown.style.display === 'none';
+
     // Close all dropdowns
     document.querySelectorAll('.dropdown-content').forEach(function(content) {
-        content.style.display = 'none';
+        if (content.id !== dropdownId) { // Close other dropdowns except the current one if it's already open
+            content.style.display = 'none';
+        }
     });
-    // Toggle this dropdown
+
+    // Toggle the clicked dropdown
     if (isClosed) {
         dropdown.style.display = 'block';
-    } else {
+    } else if (event.target.matches('input[type="button"]')) { // Only close if the button itself is clicked again
         dropdown.style.display = 'none';
     }
 }
@@ -144,15 +149,18 @@ function toggleOption(element) {
     element.classList.toggle('checked');
     // Reflect selected options in button value
     var parentDropdown = element.closest('.dropdown-content');
-    var selectedOptions = Array.from(parentDropdown.querySelectorAll('.checked')).map((opt, index) => (index + 1).toString());
+    var selectedOptions = Array.from(parentDropdown.querySelectorAll('.checked')).map(opt => opt.getAttribute('data-value'));
     parentDropdown.previousElementSibling.value = selectedOptions.join(', ');
 }
 
-document.body.addEventListener('click', function() {
+document.body.addEventListener('click', function(event) {
     // Close all dropdowns when clicking outside
-    document.querySelectorAll('.dropdown-content').forEach(function(content) {
-        content.style.display = 'none';
-    });
+    var isDropdownButton = event.target.matches('input[type="button"]');
+    if (!isDropdownButton && !event.target.closest('.dropdown-content')) {
+        document.querySelectorAll('.dropdown-content').forEach(function(content) {
+            content.style.display = 'none';
+        });
+    }
 });
 
 function addRow() {
