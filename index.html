@@ -74,9 +74,9 @@
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
 
-            cell1.innerHTML = '<input type="email" name="Email[]" required>';
-            cell2.innerHTML = '<input type="text" name="Name[]" required>';
-            cell3.innerHTML = '<input type="tel" name="Phone[]" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required>';
+            cell1.innerHTML = '<input type="email" name="Email" required>';
+            cell2.innerHTML = '<input type="text" name="Name" required>';
+            cell3.innerHTML = '<input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required>';
         }
     </script>
 </head>
@@ -85,7 +85,11 @@
         <h1>Denver Parking Survey</h1>
         <p>This is a test form built in noteforms.</p>
         <div class="map-container">
-            <iframe src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74906%2C-105.01383%2C14z&legend=0&logo=1&link=1" title="Felt Map" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <iframe 
+                src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74906%2C-105.01383%2C14z&legend=0&logo=1&link=1" 
+                title="Felt Map" 
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
         </div>
         <form action="https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec" method="POST">
             <table id="dataTable">
@@ -95,9 +99,9 @@
                     <th>Phone Number</th>
                 </tr>
                 <tr>
-                    <td><input type="email" name="Email[]" required></td>
-                    <td><input type="text" name="Name[]" required></td>
-                    <td><input type="tel" name="Phone[]" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required></td>
+                    <td><input type="email" name="Email" required></td>
+                    <td><input type="text" name="Name" required></td>
+                    <td><input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required></td>
                 </tr>
             </table>
             <button type="button" onclick="addRow()">Add Row</button>
