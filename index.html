@@ -83,9 +83,11 @@
                 });
 
                 if (response.ok) {
+                    console.log("Server responded with:", await response.text());
                     alert("Data sent successfully!");
                 } else {
                     console.error("Server responded with status:", response.status);
+                    console.error("Server responded with text:", await response.text());
                     alert("Error sending data.");
                 }
             } catch (error) {
@@ -97,7 +99,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Denver Parking Survey V1</h1>
+        <h1>Denver Parking Survey</h1>
         <form onsubmit="handleSubmit(event)">
             <table id="dataTable">
                 <tr>
