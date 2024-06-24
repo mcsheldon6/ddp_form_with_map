@@ -71,7 +71,7 @@
                 formData.push({ Name: name, Email: email, Phone: phone });
             }
 
-            console.log("FormData to be sent:", formData);
+            console.log("FormData to be sent:", JSON.stringify(formData));
 
             try {
                 const response = await fetch("https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec", {
@@ -99,7 +99,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Denver Parking Survey V4</h1>
+        <h1>Denver Parking Survey V5</h1>
         <form onsubmit="handleSubmit(event)">
             <table id="dataTable">
                 <tr>
