@@ -30,8 +30,10 @@
         input[type="text"], select, input[type="number"], input[type="checkbox"], input[type="button"] {
             padding: 8px;
             margin-top: 4px;
-            width: 100%; /* Full width of the cell */
             box-sizing: border-box; /* Include padding and border in the element's width */
+        }
+        input[type="number"], input[type="text"] {
+            width: 90%; /* Adjust width for numerical and smaller inputs */
         }
         button {
             background-color: #007bff;
@@ -48,21 +50,26 @@
             border: 1px solid #ccc;
             padding: 5px;
             z-index: 1;
-            width: calc(100% - 16px); /* Adjust width to align with the button */
+            width: 90%; /* Match the button width to prevent overflow */
+            left: 5%; /* Center the dropdown */
         }
         .dropdown-option {
             padding: 5px;
-            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .dropdown-option:hover {
             background-color: #f1f1f1;
         }
         .checkmark {
-            float: right;
             visibility: hidden;
         }
         .checked .checkmark {
             visibility: visible;
+        }
+        input[type="button"] {
+            text-align: left;
         }
     </style>
 </head>
@@ -94,19 +101,31 @@
                 </td>
                 <td><input type="text" name="Address[]" required></td>
                 <td>
-                    <input type="button" value="Select Payment Options" onclick="toggleDropdown(event, 'paymentOptionsDropdown')">
+                    <input type="button" value="Payment Options" onclick="toggleDropdown(event, 'paymentOptionsDropdown')">
                     <div id="paymentOptionsDropdown" class="dropdown-content">
-                        <div class="dropdown-option" data-value="Cash" onclick="toggleOption(this, 'paymentOptionsDropdown')">1. Cash <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Credit Card" onclick="toggleOption(this, 'paymentOptionsDropdown')">2. Credit Card <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Mobile Payment" onclick="toggleOption(this, 'paymentOptionsDropdown')">3. Mobile Payment <span class="checkmark">✓</span></div>
+                        <div class="dropdown-option" data-value="Cash" onclick="toggleOption(this, 'paymentOptionsDropdown')">
+                            1. Cash <span class="checkmark">✓</span>
+                        </div>
+                        <div class="dropdown-option" data-value="Credit Card" onclick="toggleOption(this, 'paymentOptionsDropdown')">
+                            2. Credit Card <span class="checkmark">✓</span>
+                        </div>
+                        <div class="dropdown-option" data-value="Mobile Payment" onclick="toggleOption(this, 'paymentOptionsDropdown')">
+                            3. Mobile Payment <span class="checkmark">✓</span>
+                        </div>
                     </div>
                 </td>
                 <td>
-                    <input type="button" value="Select Space Types" onclick="toggleDropdown(event, 'spaceTypesDropdown')">
+                    <input type="button" value="Space Types" onclick="toggleDropdown(event, 'spaceTypesDropdown')">
                     <div id="spaceTypesDropdown" class="dropdown-content">
-                        <div class="dropdown-option" data-value="ADA" onclick="toggleOption(this, 'spaceTypesDropdown')">1. ADA <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="EV" onclick="toggleOption(this, 'spaceTypesDropdown')">2. EV <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Motorcycle" onclick="toggleOption(this, 'spaceTypesDropdown')">3. Motorcycle <span class="checkmark">✓</span></div>
+                        <div class="dropdown-option" data-value="ADA" onclick="toggleOption(this, 'spaceTypesDropdown')">
+                            1. ADA <span class="checkmark">✓</span>
+                        </div>
+                        <div class="dropdown-option" data-value="EV" onclick="toggleOption(this, 'spaceTypesDropdown')">
+                            2. EV <span class="checkmark">✓</span>
+                        </div>
+                        <div class="dropdown-option" data-value="Motorcycle" onclick="toggleOption(this, 'spaceTypesDropdown')">
+                            3. Motorcycle <span class="checkmark">✓</span>
+                        </div>
                     </div>
                 </td>
                 <td>
@@ -154,22 +173,35 @@ function toggleOption(element, dropdownId) {
     var dropdown = document.getElementById(dropdownId);
     var selectedOptions = Array.from(dropdown.getElementsByClassName('dropdown-option'))
                               .filter(opt => opt.classList.contains('checked'))
-                              .map(opt => opt.textContent.split('.')[0]); // get the number part
+                              .map(opt => opt.textContent.split('.')[0]); // Get the number part
     var button = dropdown.previousElementSibling;
-    button.value = selectedOptions.join(', ') + " selected";
+    button.value = selectedOptions.join(', '); // Update without 'selected' word
 }
 
-document.body.addEventListener('click', function() {
-    // Close all dropdowns when clicking outside
-    document.querySelectorAll('.dropdown-content').forEach(function(content) {
-        content.style.display = 'none';
-    });
+document.body.addEventListener('click', function(event) {
+    if (!event.target.matches('input[type="button"]')) {
+        // Close all dropdowns when clicking outside
+        document.querySelectorAll('.dropdown-content').forEach(function(content) {
+            content.style.display = 'none';
+        });
+    }
 });
 
 function addRow() {
     var table = document.querySelector('table');
     var newRow = table.insertRow(-1);
     newRow.innerHTML = table.rows[1].innerHTML; // Copy the first input row
+    // Reset input values in the new row to defaults
+    Array.from(newRow.querySelectorAll('input[type="text"], input[type="number"], input[type="checkbox"]')).forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+    Array.from(newRow.querySelectorAll('select')).forEach(select => {
+        select.selectedIndex = 0;
+    });
 }
 </script>
 </body>
