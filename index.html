@@ -39,7 +39,7 @@
             border-bottom: 1px solid #ddd;
         }
         input {
-            width: 95%;
+            width: 95%; /* Adjust to ensure inputs do not overflow the table cells */
             padding: 10px;
             margin-top: 0;
             box-sizing: border-box;
@@ -56,14 +56,12 @@
             background-color: #004494;
         }
         @media (max-width: 768px) {
-            .container {
+            .container, input, button {
+                width: 100%;
                 padding: 10px;
             }
             iframe {
                 height: 300px;
-            }
-            input, button {
-                width: 100%;
             }
         }
     </style>
@@ -72,16 +70,13 @@
             var table = document.getElementById("dataTable");
             var rowCount = table.rows.length;
             var row = table.insertRow(rowCount);
-            var colCount = table.rows[0].cells.length;
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
 
-            for (var i = 0; i < colCount; i++) {
-                var newcell = row.insertCell(i);
-                newcell.innerHTML = table.rows[0].cells[i].innerHTML;
-                // Clear the value in the input fields when adding
-                if (newcell.childNodes[0].type === 'text' || newcell.childNodes[0].type === 'email' || newcell.childNodes[0].type === 'tel') {
-                    newcell.childNodes[0].value = "";
-                }
-            }
+            cell1.innerHTML = '<input type="email" name="Email" required>';
+            cell2.innerHTML = '<input type="text" name="Name" required>';
+            cell3.innerHTML = '<input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required>';
         }
     </script>
 </head>
@@ -92,27 +87,4 @@
         <div class="map-container">
             <iframe 
                 src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74906%2C-105.01383%2C14z&legend=0&logo=1&link=1" 
-                title="Felt Map" 
-                referrerpolicy="strict-origin-when-cross-origin">
-            </iframe>
-        </div>
-        <form action="https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec" method="POST">
-            <table id="dataTable">
-                <tr>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                </tr>
-                <tr>
-                    <td><input type="email" name="Email" required></td>
-                    <td><input type="text" name="Name" required></td>
-                    <td><input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required></td>
-                </tr>
-            </table>
-            <button type="button" onclick="addRow()">Add Row</button>
-            <button type="submit">Send</button>
-        </form>
-    </div>
-</body>
-</html>
-``
+                title="
