@@ -27,19 +27,31 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+        th.map-id {
+            width: 10%; /* Smaller width for 4 Digit Map ID */
+        }
         input, select, button {
             padding: 10px;
             margin-top: 4px;
+        }
+        select[multiple] {
+            height: auto;
             width: 95%;
         }
         button {
-            background-color: #4CAF50;
+            background-color: #007bff; /* Modii blue */
             color: white;
             border: none;
             cursor: pointer;
+            width: 150px; /* Fixed width for buttons */
+            animation-name: pulse;
+            animation-duration: 1s;
+            animation-timing-function: ease;
         }
-        button:hover {
-            background-color: #45a049;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         .dropdown-content, .checkbox-content {
             display: none;
@@ -62,15 +74,19 @@
 <body>
 <div class="container">
     <h1>Denver Parking Survey</h1>
-    <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec" method="POST">
+    <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec" method="POST" onsubmit="return handleSubmit();">
         <table>
             <tr>
-                <th>4 Digit Map ID</th>
+                <th class="map-id">4 Digit Map ID</th>
                 <th>Property Name</th>
-                <th>Select Asset Type</th>
+                <th>Asset Type</th>
                 <th>Address</th>
                 <th>Payment Options</th>
                 <th>Space Types</th>
+                <th>Has PARCS System</th>
+                <th>Hours of Operation</th>
+                <th>Owner</th>
+                <th>Operator</th>
             </tr>
             <tr>
                 <td><input type="text" name="MapID[]" required></td>
@@ -83,35 +99,50 @@
                     </select>
                 </td>
                 <td><input type="text" name="Address[]" required></td>
-                <td onclick="toggleDropdown(event, 'paymentOptions')">
-                    <input type="button" value="Choose">
-                    <div id="paymentOptions" class="checkbox-content">
-                        <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
-                        <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
-                        <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
-                        <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile</label>
-                    </div>
+                <td>
+                    <select name="PaymentOptions[]" multiple>
+                        <option value="Cash">Cash</option>
+                        <option value="Coins">Coins</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="Mobile Payment Provider">Mobile Payment Provider</option>
+                    </select>
                 </td>
-                <td onclick="toggleDropdown(event, 'spaceTypes')">
-                    <input type="button" value="Choose">
-                    <div id="spaceTypes" class="checkbox-content">
-                        <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
-                        <label><input type="checkbox" name="SpaceTypes[]" value="EV"> EV</label>
-                        <label><input type="checkbox" name="SpaceTypes[]" value="Carpool/Vanpool"> Carpool/Vanpool</label>
-                        <label><input type="checkbox" name="SpaceTypes[]" value="Motorcycle"> Motorcycle</label>
-                        <label><input type="checkbox" name="SpaceTypes[]" value="Bike Racks"> Bike Racks</label>
-                        <label><input type="checkbox" name="SpaceTypes[]" value="Secure Bike Parking"> Secure Bike Parking</label>
-                        <label><input type="checkbox" name="SpaceTypes[]" value="Loading"> Loading</label>
-                    </div>
+                <td>
+                    <select name="SpaceTypes[]" multiple>
+                        <option value="ADA">ADA</option>
+                        <option value="EV">EV</option>
+                        <option value="Carpool/Vanpool">Carpool/Vanpool</option>
+                        <option value="Motorcycle">Motorcycle</option>
+                        <option value="Bike Racks">Bike Racks</option>
+                        <option value="Secure Bike Parking">Secure Bike Parking</option>
+                        <option value="Loading">Loading</option>
+                    </select>
                 </td>
+                <td>
+                    <select name="PARCSSystem[]" required>
+                        <option value="">--Select--</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </td>
+                <td><input type="text" name="HoursOperation[]" required></td>
+                <td><input type="text" name="Owner[]" required></td>
+                <td><input type="text" name="Operator[]" required></td>
             </tr>
         </table>
-        <button type="button" onclick="addRow()">Add Another Entry</button>
-        <button type="submit">Submit</button>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="button" onclick="addRow()">Add Another Entry</button>
+            <button type="submit" id="submit-btn">Submit</button>
+        </div>
     </form>
 </div>
 
 <script>
+function handleSubmit() {
+    document.getElementById('submit-btn').disabled = true; // Disable button after first click
+    return true; // Allow form submission
+}
+
 function toggleDropdown(event, dropdownId) {
     event.stopPropagation(); // Prevent the dropdown from closing when interacting with it
     var content = document.getElementById(dropdownId);
@@ -136,6 +167,10 @@ function addRow() {
     var newRow = table.insertRow(-1);
     newRow.innerHTML = table.rows[1].innerHTML; // Copy the first input row
 }
+</script>
+</body>
+</html>
+
 </script>
 </body>
 </html>
