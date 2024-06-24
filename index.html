@@ -26,20 +26,21 @@
             padding: 8px;
             text-align: left;
             border-bottom: 1px solid #ddd;
-            position: relative;
         }
         input, select, button {
             padding: 10px;
             margin-top: 4px;
             width: 95%;
         }
-        .dropdown-button {
-            width: 100%;
-            text-align: left;
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 10px;
+        select[multiple] {
+            height: auto;
+        }
+        button {
+            background-color: #007bff; /* Modii blue */
+            color: white;
+            border: none;
             cursor: pointer;
+            width: 150px; /* Fixed width for buttons */
         }
         .dropdown-content {
             display: none;
@@ -47,69 +48,24 @@
             background-color: #fff;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 5px;
             z-index: 1;
-            width: calc(100% - 20px);
-            max-height: 200px;
-            overflow-y: auto;
         }
-        .dropdown-content div {
+        .dropdown-content label {
+            display: block;
             padding: 5px;
             cursor: pointer;
         }
-        .dropdown-content div:hover {
+        .dropdown-content label:hover {
             background-color: #f1f1f1; /* Hover effect */
-        }
-        .dropdown-content .selected::after {
-            content: '✔';
-            float: right;
-        }
-        .add-remove-buttons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            margin-top: 20px;
-        }
-        .add-row-button, .delete-row-button {
-            background-color: #007bff; /* Blue background */
-            color: white;
-            border: none;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-        }
-        .delete-row-button {
-            background-color: red; /* Red background for delete */
-        }
-        .fill-down-button {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            background-color: white;
-            border: 1px solid #007bff;
-            color: #007bff;
-            cursor: pointer;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 12px;
-            display: none;
-        }
-        td:hover .fill-down-button {
-            display: block;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Denver Parking Survey</h1>
-    <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec" method="POST" onsubmit="return handleSubmit();">
-        <table id="dataTable">
+    <form action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" method="POST" onsubmit="return handleSubmit();">
+        <table>
             <tr>
                 <th class="map-id">4 Digit Map ID</th>
                 <th>Property Name</th>
@@ -117,58 +73,44 @@
                 <th>Address</th>
                 <th>Payment Options</th>
                 <th>Space Types</th>
-                <th>Owner</th>
-                <th>Operator</th>
-                <th>Access</th>
             </tr>
             <tr>
                 <td><input type="text" name="MapID[]" required></td>
                 <td><input type="text" name="PropertyName[]" required></td>
                 <td>
-                    <div class="dropdown-button" onclick="toggleDropdown(this)">--Select--</div>
-                    <div class="dropdown-content">
-                        <div onclick="selectOption(this, 'AssetType[]')">Surface Lot</div>
-                        <div onclick="selectOption(this, 'AssetType[]')">Garage</div>
-                    </div>
-                    <input type="hidden" name="AssetType[]">
+                    <select name="AssetType[]" required>
+                        <option value="">--Select--</option>
+                        <option value="Surface Lot">Surface Lot</option>
+                        <option value="Garage">Garage</option>
+                    </select>
                 </td>
                 <td><input type="text" name="Address[]" required></td>
-                <td>
-                    <div class="dropdown-button" onclick="toggleDropdown(this)">Payment Options</div>
-                    <div class="dropdown-content">
-                        <div onclick="selectOption(this, 'PaymentOptions[]')">Cash</div>
-                        <div onclick="selectOption(this, 'PaymentOptions[]')">Coins</div>
-                        <div onclick="selectOption(this, 'PaymentOptions[]')">Credit Card</div>
-                        <div onclick="selectOption(this, 'PaymentOptions[]')">Mobile Payment Provider</div>
+                <td onclick="toggleDropdown(event, 'paymentOptions')">
+                    <input type="button" value="Payment Options">
+                    <div id="paymentOptions" class="dropdown-content">
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile Payment Provider</label>
                     </div>
                 </td>
-                <td>
-                    <div class="dropdown-button" onclick="toggleDropdown(this)">Space Types</div>
-                    <div class="dropdown-content">
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">ADA</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">EV</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Carpool/Vanpool</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Motorcycle</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Bike Racks</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Secure Bike Parking</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Loading</div>
-                    </div>
-                </td>
-                <td><input type="text" name="Owner[]" required></td>
-                <td><input type="text" name="Operator[]" required></td>
-                <td>
-                    <div class="dropdown-button" onclick="toggleDropdown(this)">Access</div>
-                    <div class="dropdown-content">
-                        <div onclick="selectOption(this, 'Access[]')">Public</div>
-                        <div onclick="selectOption(this, 'Access[]')">Private</div>
-                        <div onclick="selectOption(this, 'Access[]')">Both</div>
+                <td onclick="toggleDropdown(event, 'spaceTypes')">
+                    <input type="button" value="Space Types">
+                    <div id="spaceTypes" class="dropdown-content">
+                        <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="EV"> EV</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Carpool/Vanpool"> Carpool/Vanpool</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Motorcycle"> Motorcycle</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Bike Racks"> Bike Racks</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Secure Bike Parking"> Secure Bike Parking</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Loading"> Loading</label>
                     </div>
                 </td>
             </tr>
         </table>
-        <div class="add-remove-buttons">
-            <button type="button" class="add-row-button" onclick="addRow()">+</button>
-            <button type="button" class="delete-row-button" onclick="deleteRow(this)">-</button>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="button" onclick="addRow()">Add Another Entry</button>
+            <button type="submit" id="submit-btn">Submit</button>
         </div>
     </form>
 </div>
@@ -179,9 +121,9 @@ function handleSubmit() {
     return true; // Allow form submission
 }
 
-function toggleDropdown(button) {
+function toggleDropdown(event, dropdownId) {
     event.stopPropagation(); // Stop propagation to prevent immediate closing
-    var dropdown = button.nextElementSibling;
+    var dropdown = document.getElementById(dropdownId);
     var isClosed = dropdown.style.display === 'none';
     // Close all dropdowns
     document.querySelectorAll('.dropdown-content').forEach(function(content) {
@@ -202,42 +144,10 @@ document.body.addEventListener('click', function() {
     });
 });
 
-function selectOption(element, inputName) {
-    element.classList.toggle('selected');
-    var input = element.closest('td').querySelector('input[type="hidden"]');
-    var selectedValues = Array.from(element.parentNode.children)
-        .filter(child => child.classList.contains('selected'))
-        .map(child => child.textContent);
-    input.value = selectedValues.join(', ');
-    element.closest('td').querySelector('.dropdown-button').textContent = selectedValues.join(', ') || '--Select--';
-}
-
 function addRow() {
-    var table = document.getElementById('dataTable');
+    var table = document.querySelector('table');
     var newRow = table.insertRow(-1);
     newRow.innerHTML = table.rows[1].innerHTML; // Copy the first input row
-}
-
-function deleteRow(button) {
-    var row = button.closest('tr');
-    if (row.rowIndex !== 1) { // Prevent deleting the first row
-        row.parentNode.removeChild(row);
-    }
-}
-
-function fillDown(button) {
-    var td = button.closest('td');
-    var colIndex = td.cellIndex;
-    var table = document.getElementById('dataTable');
-    var rows = Array.from(table.rows).slice(td.closest('tr').rowIndex + 1);
-    var value = td.querySelector('input, .dropdown-button').value || td.querySelector('input, .dropdown-button').textContent;
-    rows.forEach(row => {
-        var cell = row.cells[colIndex];
-        if (cell.querySelector('input, .dropdown-button')) {
-            cell.querySelector('input, .dropdown-button').value = value;
-            cell.querySelector('input, .dropdown-button').textContent = value;
-        }
-    });
 }
 </script>
 </body>
