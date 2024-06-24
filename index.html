@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Denver Parking Survey</title>
+    <title>Denver Parking Survey - Version 2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -12,21 +12,11 @@
             background-color: #f4f4f4;
         }
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             background: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 90%;
-        }
-        .map-container {
-            margin: 20px -20px;
-            overflow: hidden;
-        }
-        iframe {
-            width: 100%;
-            height: 600px;
-            border: none;
         }
         table {
             width: 100%;
@@ -39,7 +29,7 @@
             border-bottom: 1px solid #ddd;
         }
         input {
-            width: 95%; /* Adjust to ensure inputs do not overflow the table cells */
+            width: 95%;
             padding: 10px;
             margin-top: 0;
             box-sizing: border-box;
@@ -55,15 +45,6 @@
         button:hover {
             background-color: #004494;
         }
-        @media (max-width: 768px) {
-            .container, input, button {
-                width: 100%;
-                padding: 10px;
-            }
-            iframe {
-                height: 300px;
-            }
-        }
     </style>
     <script>
         function addRow() {
@@ -76,22 +57,39 @@
 
             cell1.innerHTML = '<input type="email" name="Email" required>';
             cell2.innerHTML = '<input type="text" name="Name" required>';
-            cell3.innerHTML = '<input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required>';
+            cell3.innerHTML = '<input type="tel" name="Phone">';
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            var formData = [];
+            var table = document.getElementById("dataTable");
+            for (var i = 1, row; row = table.rows[i]; i++) {
+                var email = row.cells[0].getElementsByTagName('input')[0].value;
+                var name = row.cells[1].getElementsByTagName('input')[0].value;
+                var phone = row.cells[2].getElementsByTagName('input')[0].value;
+                formData.push({ Email: email, Name: name, Phone: phone });
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify(formData));
+
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    alert("Data sent successfully!");
+                } else {
+                    alert("Error sending data.");
+                }
+            };
         }
     </script>
 </head>
 <body>
     <div class="container">
         <h1>Denver Parking Survey</h1>
-        <p>This is a test form built in noteforms.</p>
-        <div class="map-container">
-            <iframe 
-                src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74906%2C-105.01383%2C14z&legend=0&logo=1&link=1" 
-                title="Felt Map" 
-                referrerpolicy="strict-origin-when-cross-origin">
-            </iframe>
-        </div>
-        <form action="https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec" method="POST">
+        <form onsubmit="handleSubmit(event)">
             <table id="dataTable">
                 <tr>
                     <th>Email</th>
@@ -101,7 +99,7 @@
                 <tr>
                     <td><input type="email" name="Email" required></td>
                     <td><input type="text" name="Name" required></td>
-                    <td><input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required></td>
+                    <td><input type="tel" name="Phone"></td>
                 </tr>
             </table>
             <button type="button" onclick="addRow()">Add Row</button>
@@ -110,4 +108,3 @@
     </div>
 </body>
 </html>
-
