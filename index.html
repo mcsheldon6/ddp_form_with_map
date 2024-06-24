@@ -27,10 +27,9 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        input[type="text"], select, input[type="number"], input[type="checkbox"], input[type="button"] {
+        input, select {
             padding: 8px;
             margin-top: 4px;
-            box-sizing: border-box;
             width: 100%;
         }
         button {
@@ -52,26 +51,21 @@
             border: 1px solid #ccc;
             padding: 5px;
             z-index: 1;
-            width: 100%;
-            left: 0;
+            width: 100%; /* Ensures dropdown width matches button width */
         }
         .dropdown-option {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 5px;
+            cursor: pointer;
         }
         .dropdown-option:hover {
             background-color: #f1f1f1;
         }
         .checkmark {
+            float: right;
             visibility: hidden;
         }
         .checked .checkmark {
             visibility: visible;
-        }
-        input[type="button"] {
-            text-align: left;
         }
     </style>
 </head>
@@ -102,17 +96,30 @@
             </thead>
             <tbody>
                 <tr>
-                    <!-- Content of the first row will go here, similar to the existing structure -->
+                    <td><input type="text" name="MapID[]"></td>
+                    <td><input type="text" name="PropertyName[]"></td>
+                    <td><select name="AssetType[]"><option value="">--Select--</option><option value="Surface Lot">Surface Lot</option><option value="Garage">Garage</option></select></td>
+                    <td><input type="text" name="Address[]"></td>
+                    <td><input type="button" value="Select Payment Options"></td>
+                    <td><input type="button" value="Select Space Types"></td>
+                    <td><select name="Access[]"><option value="">--Select--</option><option value="Public">Public</option><option value="Private">Private</option><option value="Both">Both</option></select></td>
+                    <td><input type="number" name="TotalSpaces[]"></td>
+                    <td><input type="checkbox" name="PARCSSystem[]"></td>
+                    <td><input type="text" name="Owner[]"></td>
+                    <td><input type="text" name="Operator[]"></td>
                 </tr>
             </tbody>
         </table>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" id="submit-btn">Submit</button>
+        </div>
     </form>
 </div>
 
 <script>
 function handleSubmit() {
-    document.getElementById('submit-btn').disabled = true; // Disable button after first click
-    return true; // Allow form submission
+    document.getElementById('submit-btn').disabled = true;
+    return true;
 }
 
 function addRow() {
@@ -141,14 +148,6 @@ function resetInputs(row) {
         }
     });
 }
-
-document.addEventListener('click', function(event) {
-    if (!event.target.matches('input[type="button"]')) {
-        document.querySelectorAll('.dropdown-content').forEach(function(content) {
-            content.style.display = 'none';
-        });
-    }
-});
 </script>
 </body>
 </html>
