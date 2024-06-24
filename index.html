@@ -78,33 +78,12 @@
             cell2.innerHTML = '<input type="text" name="Name" required>';
             cell3.innerHTML = '<input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required>';
         }
-
-        function submitData() {
-            const rows = document.querySelectorAll('#dataTable tr');
-            const testData = Array.from(rows).slice(1).map(row => {
-                const email = row.cells[0].querySelector('input').value;
-                const name = row.cells[1].querySelector('input').value;
-                const phone = row.cells[2].querySelector('input').value;
-                return {email, name, phone};
-            });
-
-            fetch('https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({testData})
-            })
-            .then(response => response.text())
-            .then(result => alert(result))
-            .catch(error => console.error('Error:', error));
-        }
     </script>
 </head>
 <body>
     <div class="container">
         <h1>Denver Parking Survey</h1>
-        <p>This is a test form built in noteforms. V1.0</p>
+        <p>This is a test form built in noteforms.</p>
         <div class="map-container">
             <iframe 
                 src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.74906%2C-105.01383%2C14z&legend=0&logo=1&link=1" 
@@ -112,20 +91,23 @@
                 referrerpolicy="strict-origin-when-cross-origin">
             </iframe>
         </div>
-        <table id="dataTable">
-            <tr>
-                <th>Email</th>
-                <th>Name</th>
-                <th>Phone Number</th>
-            </tr>
-            <tr>
-                <td><input type="email" name="Email" required></td>
-                <td><input type="text" name="Name" required></td>
-                <td><input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required></td>
-            </tr>
-        </table>
-        <button type="button" onclick="addRow()">Add Row</button>
-        <button type="button" onclick="submitData()">Send</button>
+        <form action="https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec" method="POST">
+            <table id="dataTable">
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                </tr>
+                <tr>
+                    <td><input type="email" name="Email" required></td>
+                    <td><input type="text" name="Name" required></td>
+                    <td><input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required></td>
+                </tr>
+            </table>
+            <button type="button" onclick="addRow()">Add Row</button>
+            <button type="submit">Send</button>
+        </form>
     </div>
 </body>
 </html>
+
