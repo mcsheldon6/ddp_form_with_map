@@ -39,7 +39,7 @@
             border-bottom: 1px solid #ddd;
         }
         input {
-            width: 95%; /* Slightly less than full width to fit in table cell */
+            width: 95%;
             padding: 10px;
             margin-top: 0;
             box-sizing: border-box;
@@ -67,6 +67,23 @@
             }
         }
     </style>
+    <script>
+        function addRow() {
+            var table = document.getElementById("dataTable");
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+            var colCount = table.rows[0].cells.length;
+
+            for (var i = 0; i < colCount; i++) {
+                var newcell = row.insertCell(i);
+                newcell.innerHTML = table.rows[0].cells[i].innerHTML;
+                // Clear the value in the input fields when adding
+                if (newcell.childNodes[0].type === 'text' || newcell.childNodes[0].type === 'email' || newcell.childNodes[0].type === 'tel') {
+                    newcell.childNodes[0].value = "";
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -80,7 +97,7 @@
             </iframe>
         </div>
         <form action="https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec" method="POST">
-            <table>
+            <table id="dataTable">
                 <tr>
                     <th>Email</th>
                     <th>Name</th>
@@ -92,8 +109,10 @@
                     <td><input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required></td>
                 </tr>
             </table>
+            <button type="button" onclick="addRow()">Add Row</button>
             <button type="submit">Send</button>
         </form>
     </div>
 </body>
 </html>
+``
