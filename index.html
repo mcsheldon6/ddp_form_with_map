@@ -8,6 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            margin: 0;
             padding: 20px;
         }
         .container {
@@ -29,7 +30,8 @@
         }
         input, select {
             padding: 8px;
-            margin-top: 4px;
+            margin: 8px 0; /* Add some margin to prevent overlap */
+            box-sizing: border-box;
             width: 100%;
         }
         button {
@@ -37,7 +39,10 @@
             color: white;
             border: none;
             cursor: pointer;
-            width: 150px;
+            padding: 8px 16px;
+            margin-left: 10px;
+            border-radius: 4px;
+            font-size: 14px;
         }
         .button-bar {
             text-align: right;
@@ -65,7 +70,6 @@
             background-color: #f1f1f1;
         }
         .checkmark {
-            float: right;
             visibility: hidden;
         }
         .checked .checkmark {
@@ -78,10 +82,10 @@
 </head>
 <body>
 <div class="container">
-    <iframe width="100%" height="450" frameborder="0" title="Felt Map" src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.75431%2C-105.01541%2C14z&legend=0&logo=1&link=1" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <iframe width="80%" height="450" style="display:block; margin: 20px auto;" frameborder="0" title="Felt Map" src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.75431%2C-105.01541%2C14z&legend=0&logo=1&link=1" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     <div class="button-bar">
-        <button onclick="addRow()">Add Row</button>
-        <button onclick="deleteRow()">Delete Row</button>
+        <button onclick="addRow()" class="google-button">Add Row</button>
+        <button onclick="deleteRow()" class="google-button">Delete Row</button>
     </div>
     <h1>Denver Parking Survey</h1>
     <form action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" method="POST" onsubmit="return handleSubmit();">
@@ -105,25 +109,38 @@
                 <tr>
                     <td><input type="text" name="MapID[]" required></td>
                     <td><input type="text" name="PropertyName[]" required></td>
-                    <td><select name="AssetType[]" required><option value="">--Select--</option><option value="Surface Lot">Surface Lot</option><option value="Garage">Garage</option></select></td>
+                    <td>
+                        <select name="AssetType[]" required>
+                            <option value="">--Select--</option>
+                            <option value="Surface Lot">Surface Lot</option>
+                            <option value="Garage">Garage</option>
+                        </select>
+                    </td>
                     <td><input type="text" name="Address[]" required></td>
                     <td>
-                        <input type="button" value="Select Payment Options" onclick="toggleDropdown(event, 'paymentOptionsDropdown')">
+                        <input type="button" value="Select Payment Options" onclick="toggleDropdown(event, 'paymentOptionsDropdown', this)">
                         <div id="paymentOptionsDropdown" class="dropdown-content">
-                            <div class="dropdown-option" onclick="toggleOption(event, 'Cash')">Cash <span class="checkmark">✓</span></div>
-                            <div class="dropdown-option" onclick="toggleOption(event, 'Credit Card')">Credit Card <span class="checkmark">✓</span></div>
-                            <div class="dropdown-option" onclick="toggleOption(event, 'Mobile Payment')">Mobile Payment <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions')">1. Cash <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions')">2. Credit Card <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions')">3. Mobile Payment <span class="checkmark">✓</span></div>
                         </div>
                     </td>
                     <td>
-                        <input type="button" value="Select Space Types" onclick="toggleDropdown(event, 'spaceTypesDropdown')">
+                        <input type="button" value="Select Space Types" onclick="toggleDropdown(event, 'spaceTypesDropdown', this)">
                         <div id="spaceTypesDropdown" class="dropdown-content">
-                            <div class="dropdown-option" onclick="toggleOption(event, 'ADA')">ADA <span class="checkmark">✓</span></div>
-                            <div class="dropdown-option" onclick="toggleOption(event, 'EV')">EV <span class="checkmark">✓</span></div>
-                            <div class="dropdown-option" onclick="toggleOption(event, 'Motorcycle')">Motorcycle <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">1. ADA <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">2. EV <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">3. Motorcycle <span class="checkmark">✓</span></div>
                         </div>
                     </td>
-                    <td><select name="Access[]" required><option value="">--Select--</option><option value="Public">Public</option><option value="Private">Private</option><option value="Both">Both</option></select></td>
+                    <td>
+                        <select name="Access[]" required>
+                            <option value="">--Select--</option>
+                            <option value="Public">Public</option>
+                            <option value="Private">Private</option>
+                            <option value="Both">Both</option>
+                        </select>
+                    </td>
                     <td><input type="number" name="TotalSpaces[]" min="0" required></td>
                     <td><input type="checkbox" name="PARCSSystem[]"></td>
                     <td><input type="text" name="Owner[]" required></td>
@@ -131,6 +148,9 @@
                 </tr>
             </tbody>
         </table>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" class="google-button" id="submit-btn">Submit</button>
+        </div>
     </form>
 </div>
 
@@ -140,16 +160,27 @@ function handleSubmit() {
     return true;
 }
 
-function toggleDropdown(event, dropdownId) {
+function toggleDropdown(event, dropdownId, button) {
     event.stopPropagation();
     var dropdown = document.getElementById(dropdownId);
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+    } else {
+        document.querySelectorAll('.dropdown-content').forEach(function(content) {
+            content.style.display = 'none';
+        });
+        dropdown.style.display = 'block';
+        dropdown.style.left = button.getBoundingClientRect().left + 'px';
+        dropdown.style.top = button.getBoundingClientRect().bottom + window.scrollY + 'px';
+    }
 }
 
-function toggleOption(event, option) {
-    event.stopPropagation();
-    var checkmark = event.currentTarget.querySelector('.checkmark');
-    checkmark.style.visibility = checkmark.style.visibility === 'visible' ? 'hidden' : 'visible';
+function toggleOption(element, dropdownName) {
+    element.classList.toggle('checked');
+    var button = element.closest('td').querySelector('input[type="button"]');
+    var selectedOptions = Array.from(element.closest('.dropdown-content').querySelectorAll('.dropdown-option.checked'))
+        .map(option => option.textContent.split('.')[0].trim());
+    button.value = selectedOptions.join(', ');
 }
 
 document.addEventListener('click', function() {
@@ -160,7 +191,7 @@ document.addEventListener('click', function() {
 
 function addRow() {
     var table = document.querySelector('#surveyTable tbody');
-    var newRow = table.insertRow(-1);
+    var newRow = table.insertRow(table.rows.length);
     newRow.innerHTML = table.rows[0].innerHTML;
     resetInputs(newRow);
 }
@@ -168,7 +199,7 @@ function addRow() {
 function deleteRow() {
     var table = document.querySelector('#surveyTable tbody');
     if (table.rows.length > 1) {
-        table.deleteRow(-1);
+        table.deleteRow(table.rows.length - 1);
     }
 }
 
