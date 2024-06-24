@@ -39,9 +39,11 @@
 <div class="container">
     <h1>Denver Parking Survey</h1>
     <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec" method="POST">
-        <input type="email" name="Email[]" placeholder="Enter email" required>
-        <input type="text" name="Name[]" placeholder="Enter name" required>
-        <input type="tel" name="Phone[]" placeholder="Enter phone (123-456-7890)" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+        <div id="input-container">
+            <input type="email" name="Email[]" placeholder="Enter email" required>
+            <input type="text" name="Name[]" placeholder="Enter name" required>
+            <input type="tel" name="Phone[]" placeholder="Enter phone (123-456-7890)" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+        </div>
         <button type="button" onclick="addRow()">Add Another Person</button>
         <button type="submit">Submit</button>
     </form>
@@ -49,8 +51,8 @@
 
 <script>
 function addRow() {
-    var form = document.querySelector('form');
-    form.insertAdjacentHTML('beforeend', `
+    var container = document.getElementById('input-container');
+    container.insertAdjacentHTML('beforeend', `
         <input type="email" name="Email[]" placeholder="Enter email" required>
         <input type="text" name="Name[]" placeholder="Enter name" required>
         <input type="tel" name="Phone[]" placeholder="Enter phone (123-456-7890)" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
@@ -59,3 +61,4 @@ function addRow() {
 </script>
 </body>
 </html>
+
