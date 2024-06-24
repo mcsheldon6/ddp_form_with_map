@@ -34,7 +34,6 @@
         }
         select[multiple] {
             height: auto;
-            width: 95%;
         }
         button {
             background-color: #007bff; /* Modii blue */
@@ -42,14 +41,6 @@
             border: none;
             cursor: pointer;
             width: 150px; /* Fixed width for buttons */
-            animation-name: pulse;
-            animation-duration: 1s;
-            animation-timing-function: ease;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
         .dropdown-content {
             display: none;
@@ -83,13 +74,13 @@
                 <td><input type="text" name="PropertyName[]" required></td>
                 <td>
                     <select name="AssetType[]" required>
-                        <option value="">--Multi-Select--</option>
+                        <option value="">--Select--</option>
                         <option value="Surface Lot">Surface Lot</option>
                         <option value="Garage">Garage</option>
                     </select>
                 </td>
                 <td><input type="text" name="Address[]" required></td>
-                <td onclick="toggleDropdown(this, 'paymentOptions')">
+                <td onclick="toggleDropdown(event, 'paymentOptions')">
                     <input type="button" value="Payment Options">
                     <div id="paymentOptions" class="dropdown-content">
                         <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
@@ -98,7 +89,7 @@
                         <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile Payment Provider</label>
                     </div>
                 </td>
-                <td onclick="toggleDropdown(this, 'spaceTypes')">
+                <td onclick="toggleDropdown(event, 'spaceTypes')">
                     <input type="button" value="Space Types">
                     <div id="spaceTypes" class="dropdown-content">
                         <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
