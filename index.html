@@ -19,7 +19,7 @@
             max-width: 600px;
             margin: auto;
         }
-        input, button {
+        input, select, button {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
@@ -40,11 +40,39 @@
     <h1>Denver Parking Survey</h1>
     <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec" method="POST">
         <div id="input-container">
-            <input type="email" name="Email[]" placeholder="Enter email" required>
-            <input type="text" name="Name[]" placeholder="Enter name" required>
-            <input type="tel" name="Phone[]" placeholder="Enter phone (123-456-7890)" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+            <input type="text" name="MapID[]" placeholder="4 Digit Map ID" required>
+            <input type="text" name="PropertyName[]" placeholder="Property Name" required>
+            <select name="AssetType[]" required>
+                <option value="">Select Asset Type</option>
+                <option value="Surface Lot">Surface Lot</option>
+                <option value="Garage">Garage</option>
+            </select>
+            <input type="text" name="Address[]" placeholder="Address" required>
+            <fieldset>
+                <legend>Payment Options</legend>
+                <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
+                <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
+                <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
+                <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile Payment Provider</label>
+            </fieldset>
+            <fieldset>
+                <legend>Space Types</legend>
+                <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
+                <label><input type="checkbox" name="SpaceTypes[]" value="EV"> EV</label>
+                <label><input type="checkbox" name="SpaceTypes[]" value="Carpool/Vanpool"> Carpool/Vanpool</label>
+                <label><input type="checkbox" name="SpaceTypes[]" value="Motorcycle"> Motorcycle</label>
+                <label><input type="checkbox" name="SpaceTypes[]" value="Bike Racks"> Bike Racks</label>
+                <label><input type="checkbox" name="SpaceTypes[]" value="Secure Bike Parking"> Secure Bike Parking</label>
+                <label><input type="checkbox" name="SpaceTypes[]" value="Loading"> Loading</label>
+            </fieldset>
+            <fieldset>
+                <legend>Access</legend>
+                <label><input type="checkbox" name="Access[]" value="Public"> Public</label>
+                <label><input type="checkbox" name="Access[]" value="Private"> Private</label>
+                <label><input type="checkbox" name="Access[]" value="Mixed-Use"> Mixed-Use</label>
+            </fieldset>
         </div>
-        <button type="button" onclick="addRow()">Add Another Person</button>
+        <button type="button" onclick="addRow()">Add Another Entry</button>
         <button type="submit">Submit</button>
     </form>
 </div>
@@ -53,12 +81,39 @@
 function addRow() {
     var container = document.getElementById('input-container');
     container.insertAdjacentHTML('beforeend', `
-        <input type="email" name="Email[]" placeholder="Enter email" required>
-        <input type="text" name="Name[]" placeholder="Enter name" required>
-        <input type="tel" name="Phone[]" placeholder="Enter phone (123-456-7890)" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+        <input type="text" name="MapID[]" placeholder="4 Digit Map ID" required>
+        <input type="text" name="PropertyName[]" placeholder="Property Name" required>
+        <select name="AssetType[]" required>
+            <option value="">Select Asset Type</option>
+            <option value="Surface Lot">Surface Lot</option>
+            <option value="Garage">Garage</option>
+        </select>
+        <input type="text" name="Address[]" placeholder="Address" required>
+        <fieldset>
+            <legend>Payment Options</legend>
+            <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
+            <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
+            <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
+            <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile Payment Provider</label>
+        </fieldset>
+        <fieldset>
+            <legend>Space Types</legend>
+            <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
+            <label><input type="checkbox" name="SpaceTypes[]" value="EV"> EV</label>
+            <label><input type="checkbox" name="SpaceTypes[]" value="Carpool/Vanpool"> Carpool/Vanpool</label>
+            <label><input type="checkbox" name="SpaceTypes[]" value="Motorcycle"> Motorcycle</label>
+            <label><input type="checkbox" name="SpaceTypes[]" value="Bike Racks"> Bike Racks</label>
+            <label><input type="checkbox" name="SpaceTypes[]" value="Secure Bike Parking"> Secure Bike Parking</label>
+            <label><input type="checkbox" name="SpaceTypes[]" value="Loading"> Loading</label>
+        </fieldset>
+        <fieldset>
+            <legend>Access</legend>
+            <label><input type="checkbox" name="Access[]" value="Public"> Public</label>
+            <label><input type="checkbox" name="Access[]" value="Private"> Private</label>
+            <label><input type="checkbox" name="Access[]" value="Mixed-Use"> Mixed-Use</label>
+        </fieldset>
     `);
 }
 </script>
 </body>
 </html>
-
