@@ -27,10 +27,11 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        input, select, button {
-            padding: 10px;
+        input[type="text"], select, input[type="number"], input[type="checkbox"] {
+            padding: 8px;
             margin-top: 4px;
-            width: 95%;
+            width: 100%; /* Full width of the cell */
+            box-sizing: border-box; /* Include padding and border in the element's width */
         }
         button {
             background-color: #007bff;
@@ -70,12 +71,15 @@
     <form action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" method="POST" onsubmit="return handleSubmit();">
         <table>
             <tr>
-                <th class="map-id">4 Digit Map ID</th>
+                <th>4 Digit Map ID</th>
                 <th>Property Name</th>
                 <th>Asset Type</th>
                 <th>Address</th>
                 <th>Payment Options</th>
                 <th>Space Types</th>
+                <th>Access</th>
+                <th>Total # Spaces</th>
+                <th>PARCS System</th>
             </tr>
             <tr>
                 <td><input type="text" name="MapID[]" required></td>
@@ -88,27 +92,18 @@
                     </select>
                 </td>
                 <td><input type="text" name="Address[]" required></td>
-                <td onclick="toggleDropdown(event, 'paymentOptions')">
-                    <input type="button" value="Payment Options">
-                    <div id="paymentOptions" class="dropdown-content">
-                        <div class="dropdown-option" data-value="Cash" onclick="toggleOption(this)">1. Cash <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Coins" onclick="toggleOption(this)">2. Coins <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Credit Card" onclick="toggleOption(this)">3. Credit Card <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Mobile Payment Provider" onclick="toggleOption(this)">4. Mobile Payment Provider <span class="checkmark">✓</span></div>
-                    </div>
+                <td><input type="text" name="PaymentOptions[]" required></td>
+                <td><input type="text" name="SpaceTypes[]" required></td>
+                <td>
+                    <select name="Access[]" required>
+                        <option value="">--Select--</option>
+                        <option value="Public">Public</option>
+                        <option value="Private">Private</option>
+                        <option value="Both">Both</option>
+                    </select>
                 </td>
-                <td onclick="toggleDropdown(event, 'spaceTypes')">
-                    <input type="button" value="Space Types">
-                    <div id="spaceTypes" class="dropdown-content">
-                        <div class="dropdown-option" data-value="ADA" onclick="toggleOption(this)">1. ADA <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="EV" onclick="toggleOption(this)">2. EV <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Carpool/Vanpool" onclick="toggleOption(this)">3. Carpool/Vanpool <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Motorcycle" onclick="toggleOption(this)">4. Motorcycle <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Bike Racks" onclick="toggleOption(this)">5. Bike Racks <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Secure Bike Parking" onclick="toggleOption(this)">6. Secure Bike Parking <span class="checkmark">✓</span></div>
-                        <div class="dropdown-option" data-value="Loading" onclick="toggleOption(this)">7. Loading <span class="checkmark">✓</span></div>
-                    </div>
-                </td>
+                <td><input type="number" name="TotalSpaces[]" min="0" required></td>
+                <td><input type="checkbox" name="PARCSSystem[]"></td>
             </tr>
         </table>
         <div style="text-align: center; margin-top: 20px;">
@@ -123,48 +118,6 @@ function handleSubmit() {
     document.getElementById('submit-btn').disabled = true; // Disable button after first click
     return true; // Allow form submission
 }
-
-function toggleDropdown(event, dropdownId) {
-    event.stopPropagation(); // Stop propagation to prevent immediate closing
-
-    var dropdown = document.getElementById(dropdownId);
-    var isClosed = dropdown.style.display === 'none';
-
-    // Close all dropdowns
-    document.querySelectorAll('.dropdown-content').forEach(function(content) {
-        if (content.id !== dropdownId) { // Close other dropdowns except the current one if it's already open
-            content.style.display = 'none';
-        }
-    });
-
-    // Toggle the clicked dropdown
-    if (isClosed) {
-        dropdown.style.display = 'block';
-    } else if (event.target.matches('input[type="button"]')) { // Only close if the button itself is clicked again
-        dropdown.style.display = 'none';
-    }
-}
-
-function toggleOption(element) {
-    element.classList.toggle('checked');
-    // Reflect selected option indices in button value
-    var parentDropdown = element.closest('.dropdown-content');
-    var options = Array.from(parentDropdown.children); // Get all dropdown options as an array
-    var selectedIndices = options.filter(opt => opt.classList.contains('checked')) // Filter to only checked options
-                                 .map(opt => options.indexOf(opt) + 1) // Get the 1-based index of each checked option
-                                 .join(', '); // Join indices with commas
-    parentDropdown.previousElementSibling.value = selectedIndices; // Set indices as the value of the button
-}
-
-document.body.addEventListener('click', function(event) {
-    // Close all dropdowns when clicking outside
-    var isDropdownButton = event.target.matches('input[type="button"]');
-    if (!isDropdownButton && !event.target.closest('.dropdown-content')) {
-        document.querySelectorAll('.dropdown-content').forEach(function(content) {
-            content.style.display = 'none';
-        });
-    }
-});
 
 function addRow() {
     var table = document.querySelector('table');
