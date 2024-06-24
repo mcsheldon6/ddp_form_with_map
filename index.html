@@ -30,7 +30,7 @@
         input, select, button {
             padding: 10px;
             margin-top: 4px;
-            width: 100%; /* Adjust input width to fill cell */
+            width: 95%;
         }
         select[multiple] {
             height: auto;
@@ -50,18 +50,14 @@
             border: 1px solid #ccc;
             padding: 5px;
             z-index: 1;
-            width: 100%; /* Make dropdown content fill the cell */
         }
-        .dropdown-content div {
+        .dropdown-content label {
+            display: block;
             padding: 5px;
             cursor: pointer;
         }
-        .dropdown-content div:hover {
+        .dropdown-content label:hover {
             background-color: #f1f1f1; /* Hover effect */
-        }
-        .dropdown-content .selected::after {
-            content: '✔';
-            float: right;
         }
     </style>
 </head>
@@ -77,8 +73,6 @@
                 <th>Address</th>
                 <th>Payment Options</th>
                 <th>Space Types</th>
-                <th>Owner</th>
-                <th>Operator</th>
             </tr>
             <tr>
                 <td><input type="text" name="MapID[]" required></td>
@@ -91,29 +85,27 @@
                     </select>
                 </td>
                 <td><input type="text" name="Address[]" required></td>
-                <td onclick="toggleDropdown(event, 'paymentOptions', this)">
-                    <div class="dropdown-button">Payment Options</div>
+                <td onclick="toggleDropdown(event, 'paymentOptions')">
+                    <input type="button" value="Payment Options">
                     <div id="paymentOptions" class="dropdown-content">
-                        <div onclick="selectOption(this, 'PaymentOptions[]')">Cash</div>
-                        <div onclick="selectOption(this, 'PaymentOptions[]')">Coins</div>
-                        <div onclick="selectOption(this, 'PaymentOptions[]')">Credit Card</div>
-                        <div onclick="selectOption(this, 'PaymentOptions[]')">Mobile Payment Provider</div>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile Payment Provider</label>
                     </div>
                 </td>
-                <td onclick="toggleDropdown(event, 'spaceTypes', this)">
-                    <div class="dropdown-button">Space Types</div>
+                <td onclick="toggleDropdown(event, 'spaceTypes')">
+                    <input type="button" value="Space Types">
                     <div id="spaceTypes" class="dropdown-content">
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">ADA</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">EV</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Carpool/Vanpool</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Motorcycle</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Bike Racks</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Secure Bike Parking</div>
-                        <div onclick="selectOption(this, 'SpaceTypes[]')">Loading</div>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="EV"> EV</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Carpool/Vanpool"> Carpool/Vanpool</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Motorcycle"> Motorcycle</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Bike Racks"> Bike Racks</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Secure Bike Parking"> Secure Bike Parking</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Loading"> Loading</label>
                     </div>
                 </td>
-                <td><input type="text" name="Owner[]" required></td>
-                <td><input type="text" name="Operator[]" required></td>
             </tr>
         </table>
         <div style="text-align: center; margin-top: 20px;">
@@ -129,9 +121,9 @@ function handleSubmit() {
     return true; // Allow form submission
 }
 
-function toggleDropdown(event, dropdownId, parentElement) {
+function toggleDropdown(event, dropdownId) {
     event.stopPropagation(); // Stop propagation to prevent immediate closing
-    var dropdown = parentElement.querySelector('.dropdown-content');
+    var dropdown = document.getElementById(dropdownId);
     var isClosed = dropdown.style.display === 'none';
     // Close all dropdowns
     document.querySelectorAll('.dropdown-content').forEach(function(content) {
@@ -152,42 +144,10 @@ document.body.addEventListener('click', function() {
     });
 });
 
-function selectOption(element, inputName) {
-    element.classList.toggle('selected');
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = inputName;
-    input.value = element.textContent;
-    var parentElement = element.closest('td');
-    if (element.classList.contains('selected')) {
-        parentElement.appendChild(input);
-    } else {
-        Array.from(parentElement.querySelectorAll('input')).forEach(function(input) {
-            if (input.value === element.textContent) {
-                input.remove();
-            }
-        });
-    }
-    updateDropdownButton(parentElement);
-}
-
-function updateDropdownButton(parentElement) {
-    var selectedOptions = Array.from(parentElement.querySelectorAll('.selected')).map(function(element) {
-        return element.textContent;
-    });
-    parentElement.querySelector('.dropdown-button').textContent = selectedOptions.join(', ') || 'Payment Options';
-}
-
 function addRow() {
     var table = document.querySelector('table');
     var newRow = table.insertRow(-1);
     newRow.innerHTML = table.rows[1].innerHTML; // Copy the first input row
-    // Reassign event listeners for new dropdowns
-    newRow.querySelectorAll('.dropdown-button').forEach(function(button, index) {
-        button.onclick = function(event) {
-            toggleDropdown(event, index === 0 ? 'paymentOptions' : 'spaceTypes', newRow.cells[index + 4]);
-        };
-    });
 }
 </script>
 </body>
