@@ -36,11 +36,11 @@
             height: auto;
         }
         button {
-            background-color: #007bff;
+            background-color: #007bff; /* Modii blue */
             color: white;
             border: none;
             cursor: pointer;
-            width: 150px;
+            width: 150px; /* Fixed width for buttons */
         }
         .dropdown-content {
             display: none;
@@ -51,19 +51,13 @@
             padding: 5px;
             z-index: 1;
         }
-        .dropdown-content div {
+        .dropdown-content label {
+            display: block;
             padding: 5px;
             cursor: pointer;
         }
-        .dropdown-content div:hover {
-            background-color: #f1f1f1;
-        }
-        .checkmark {
-            float: right;
-            display: none;
-        }
-        .checked .checkmark {
-            display: block;
+        .dropdown-content label:hover {
+            background-color: #f1f1f1; /* Hover effect */
         }
     </style>
 </head>
@@ -86,30 +80,30 @@
                 <td>
                     <select name="AssetType[]" required>
                         <option value="">--Select--</option>
-                        <option value="Surface Lot">1. Surface Lot</option>
-                        <option value="Garage">2. Garage</option>
+                        <option value="Surface Lot">Surface Lot</option>
+                        <option value="Garage">Garage</option>
                     </select>
                 </td>
                 <td><input type="text" name="Address[]" required></td>
                 <td onclick="toggleDropdown(event, 'paymentOptions')">
                     <input type="button" value="Payment Options">
                     <div id="paymentOptions" class="dropdown-content">
-                        <div data-value="Cash" onclick="toggleOption(this)">1. Cash<span class="checkmark">✓</span></div>
-                        <div data-value="Coins" onclick="toggleOption(this)">2. Coins<span class="checkmark">✓</span></div>
-                        <div data-value="Credit Card" onclick="toggleOption(this)">3. Credit Card<span class="checkmark">✓</span></div>
-                        <div data-value="Mobile Payment Provider" onclick="toggleOption(this)">4. Mobile Payment Provider<span class="checkmark">✓</span></div>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile Payment Provider</label>
                     </div>
                 </td>
                 <td onclick="toggleDropdown(event, 'spaceTypes')">
                     <input type="button" value="Space Types">
-                    <div id="spaceTypes" the dropdown-content">
-                        <div data-value="ADA" onclick="toggleOption(this)">1. ADA<span class="checkmark">✓</span></div>
-                        <div data-value="EV" onclick="toggleOption(this)">2. EV<span class="checkmark">✓</span></div>
-                        <div data-value="Carpool/Vanpool" onclick="toggleOption(this)">3. Carpool/Vanpool<span class="checkmark">✓</span></div>
-                        <div data-value="Motorcycle" onclick="toggleOption(this)">4. Motorcycle<span the checkmark">✓</span></div>
-                        <div data-value="Bike Racks" onclick="toggleOption(this)">5. Bike Racks<span class="checkmark">✓</span></div>
-                        <div data-value="Secure Bike Parking" onclick="toggleOption(this)">6. Secure Bike Parking<span class="checkmark">✓</span></div>
-                        <div data-value="Loading" onclick="toggleOption(this)">7. Loading<span class="checkmark">✓</span></div>
+                    <div id="spaceTypes" class="dropdown-content">
+                        <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="EV"> EV</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Carpool/Vanpool"> Carpool/Vanpool</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Motorcycle"> Motorcycle</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Bike Racks"> Bike Racks</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Secure Bike Parking"> Secure Bike Parking</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Loading"> Loading</label>
                     </div>
                 </td>
             </tr>
@@ -143,10 +137,6 @@ function toggleDropdown(event, dropdownId) {
     }
 }
 
-function toggleOption(element) {
-    element.classList.toggle('checked'); // Toggle the checkmark display
-}
-
 document.body.addEventListener('click', function() {
     // Close all dropdowns when clicking outside
     document.querySelectorAll('.dropdown-content').forEach(function(content) {
@@ -159,10 +149,6 @@ function addRow() {
     var newRow = table.insertRow(-1);
     newRow.innerHTML = table.rows[1].innerHTML; // Copy the first input row
 }
-</script>
-</body>
-</html>
-
 </script>
 </body>
 </html>
