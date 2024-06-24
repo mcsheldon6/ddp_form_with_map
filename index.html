@@ -78,6 +78,26 @@
             cell2.innerHTML = '<input type="text" name="Name" required>';
             cell3.innerHTML = '<input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required>';
         }
+        function submitData() {
+    const rows = document.querySelectorAll('#dataTable tr');
+    const testData = Array.from(rows).slice(1).map(row => {
+        const email = row.cells[0].querySelector('input').value;
+        const name = row.cells[1].querySelector('input').value;
+        const phone = row.cells[2].querySelector('input').value;
+        return {email, name, phone};
+    });
+
+    fetch('https://script.google.com/macros/s/AKfycby3KFX6PT8OxMOFIQeXaxgbRe43NRJOEQNHGLcEOre4D7RYtHxITmiDqNgS8oMjAzJU/exec', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({testData})
+    })
+    .then(response => response.text())
+    .then(result => alert(result))
+    .catch(error => console.error('Error:', error));
+}
     </script>
 </head>
 <body>
