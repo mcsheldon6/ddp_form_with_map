@@ -27,12 +27,10 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        th.map-id {
-            width: 10%; /* Smaller width for 4 Digit Map ID */
-        }
         input, select, button {
             padding: 10px;
             margin-top: 4px;
+            width: 95%;
         }
         select[multiple] {
             height: auto;
@@ -53,21 +51,17 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        .dropdown-content, .checkbox-content {
+        .dropdown-content {
             display: none;
             position: absolute;
             background-color: #f9f9f9;
-            min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            padding: 5px;
+            padding: 10px;
             z-index: 1;
-        }
-        .checkbox-content label {
-            display: block;
             cursor: pointer;
         }
-        .checkbox-content input[type="checkbox"] {
-            margin-right: 10px;
+        .dropdown-content label {
+            display: block;
         }
     </style>
 </head>
@@ -83,51 +77,39 @@
                 <th>Address</th>
                 <th>Payment Options</th>
                 <th>Space Types</th>
-                <th>Has PARCS System</th>
-                <th>Hours of Operation</th>
-                <th>Owner</th>
-                <th>Operator</th>
             </tr>
             <tr>
                 <td><input type="text" name="MapID[]" required></td>
                 <td><input type="text" name="PropertyName[]" required></td>
                 <td>
                     <select name="AssetType[]" required>
-                        <option value="">--Select--</option>
+                        <option value="">--Multi-Select--</option>
                         <option value="Surface Lot">Surface Lot</option>
                         <option value="Garage">Garage</option>
                     </select>
                 </td>
                 <td><input type="text" name="Address[]" required></td>
-                <td>
-                    <select name="PaymentOptions[]" multiple>
-                        <option value="Cash">Cash</option>
-                        <option value="Coins">Coins</option>
-                        <option value="Credit Card">Credit Card</option>
-                        <option value="Mobile Payment Provider">Mobile Payment Provider</option>
-                    </select>
+                <td onclick="toggleDropdown(this, 'paymentOptions')">
+                    <input type="button" value="Payment Options">
+                    <div id="paymentOptions" class="dropdown-content">
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile Payment Provider</label>
+                    </div>
                 </td>
-                <td>
-                    <select name="SpaceTypes[]" multiple>
-                        <option value="ADA">ADA</option>
-                        <option value="EV">EV</option>
-                        <option value="Carpool/Vanpool">Carpool/Vanpool</option>
-                        <option value="Motorcycle">Motorcycle</option>
-                        <option value="Bike Racks">Bike Racks</option>
-                        <option value="Secure Bike Parking">Secure Bike Parking</option>
-                        <option value="Loading">Loading</option>
-                    </select>
+                <td onclick="toggleDropdown(this, 'spaceTypes')">
+                    <input type="button" value="Space Types">
+                    <div id="spaceTypes" class="dropdown-content">
+                        <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="EV"> EV</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Carpool/Vanpool"> Carpool/Vanpool</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Motorcycle"> Motorcycle</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Bike Racks"> Bike Racks</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Secure Bike Parking"> Secure Bike Parking</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Loading"> Loading</label>
+                    </div>
                 </td>
-                <td>
-                    <select name="PARCSSystem[]" required>
-                        <option value="">--Select--</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </td>
-                <td><input type="text" name="HoursOperation[]" required></td>
-                <td><input type="text" name="Owner[]" required></td>
-                <td><input type="text" name="Operator[]" required></td>
             </tr>
         </table>
         <div style="text-align: center; margin-top: 20px;">
@@ -144,21 +126,25 @@ function handleSubmit() {
 }
 
 function toggleDropdown(event, dropdownId) {
-    event.stopPropagation(); // Prevent the dropdown from closing when interacting with it
-    var content = document.getElementById(dropdownId);
-    var isVisible = content.style.display === 'block';
+    event.stopPropagation(); // Stop propagation to prevent immediate closing
+    var dropdown = document.getElementById(dropdownId);
+    var isClosed = dropdown.style.display === 'none';
     // Close all dropdowns
-    document.querySelectorAll('.checkbox-content').forEach(function(div) {
-        div.style.display = 'none';
+    document.querySelectorAll('.dropdown-content').forEach(function(content) {
+        content.style.display = 'none';
     });
-    // Toggle the clicked dropdown
-    content.style.display = isVisible ? 'none' : 'block';
+    // Toggle this dropdown
+    if (isClosed) {
+        dropdown.style.display = 'block';
+    } else {
+        dropdown.style.display = 'none';
+    }
 }
 
 document.body.addEventListener('click', function() {
     // Close all dropdowns when clicking outside
-    document.querySelectorAll('.checkbox-content').forEach(function(div) {
-        div.style.display = 'none';
+    document.querySelectorAll('.dropdown-content').forEach(function(content) {
+        content.style.display = 'none';
     });
 });
 
@@ -171,6 +157,3 @@ function addRow() {
 </body>
 </html>
 
-</script>
-</body>
-</html>
