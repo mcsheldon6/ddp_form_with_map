@@ -16,7 +16,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 85%; /* Adjusted to make iframe more square-like */
+            width: 95%;
             margin: auto;
         }
         table {
@@ -56,44 +56,19 @@
         }
         .button-bar {
             text-align: right;
+            margin-top: 20px;
             margin-bottom: 10px;
         }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border: 1px solid #ccc;
-            padding: 5px;
-            z-index: 1;
-            width: auto; /* Adjusted to fit content */
-        }
-        .dropdown-option {
+        .button-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 5px;
-            cursor: pointer;
-        }
-        .dropdown-option:hover {
-            background-color: #f1f1f1;
-        }
-        .checkmark {
-            float: right;
-            visibility: hidden;
-        }
-        .checked .checkmark {
-            visibility: visible;
-        }
-        input[type="button"] {
-            text-align: left;
+            justify-content: flex-end;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <iframe width="80%" height="450" style="display:block; margin: 20px auto;" frameborder="0" title="Felt Map" src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.75431%2C-105.01541%2C14z&legend=0&logo=1&link=1" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-    <div class="button-bar">
+    <iframe width="85%" height="450" style="display:block; margin: 20px auto;" frameborder="0" title="Felt Map" src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.75431%2C-105.01541%2C14z&legend=0&logo=1&link=1" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <div class="button-container">
         <button onclick="addRow()" class="google-button">Add Row</button>
         <button onclick="deleteRow()" class="google-button">Delete Row</button>
     </div>
@@ -128,54 +103,36 @@
 </div>
 
 <script>
-function handleSubmit() {
-    document.getElementById('submit-btn').disabled = true; // Prevent multiple submissions
-    return true;
-}
-
-function toggleDropdown(event, dropdownId) {
-    event.stopPropagation();
-    var dropdown = document.getElementById(dropdownId);
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-}
-
-function toggleOption(event, option) {
-    event.stopPropagation();
-    var checkmark = event.currentTarget.querySelector('.checkmark');
-    checkmark.style.visibility = checkmark.style.visibility === 'visible' ? 'hidden' : 'visible';
-}
-
-document.addEventListener('click', function() {
-    document.querySelectorAll('.dropdown-content').forEach(function(dropdown) {
-        dropdown.style.display = 'none';
-    });
-});
-
-function addRow() {
-    var table = document.querySelector('#surveyTable tbody');
-    var newRow = table.insertRow(-1);
-    newRow.innerHTML = table.rows[0].innerHTML;
-    resetInputs(newRow);
-}
-
-function deleteRow() {
-    var table = document.querySelector('#surveyTable tbody');
-    if (table.rows.length > 1) {
-        table.deleteRow(-1);
+    function handleSubmit() {
+        document.getElementById('submit-btn').disabled = true; // Prevent multiple submissions
+        return true;
     }
-}
 
-function resetInputs(row) {
-    Array.from(row.querySelectorAll('input, select')).forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else if (input.tagName === 'SELECT') {
-            input.selectedIndex = 0;
-        } else {
-            input.value = '';
+    function addRow() {
+        var table = document.querySelector('#surveyTable tbody');
+        var newRow = table.insertRow(table.rows.length);
+        newRow.innerHTML = table.rows[0].innerHTML;
+        resetInputs(newRow);
+    }
+
+    function deleteRow() {
+        var table = document.querySelector('#surveyTable tbody');
+        if (table.rows.length > 1) {
+            table.deleteRow(table.rows.length - 1);
         }
-    });
-}
+    }
+
+    function resetInputs(row) {
+        Array.from(row.querySelectorAll('input, select')).forEach(input => {
+            if (input.type === 'checkbox') {
+                input.checked = false;
+            } else if (input.tagName === 'SELECT') {
+                input.selectedIndex = 0;
+            } else {
+                input.value = '';
+            }
+        });
+    }
 </script>
 </body>
 </html>
