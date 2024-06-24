@@ -7,76 +7,55 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #f4f4f4;
+            padding: 20px;
         }
         .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
             background: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             width: 90%;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+            max-width: 600px;
+            margin: auto;
         }
         input, button {
+            width: 100%;
             padding: 10px;
-            margin-top: 5px;
+            margin-top: 10px;
         }
         button {
-            background-color: #0056b3;
+            background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
         }
         button:hover {
-            background-color: #004494;
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Denver Parking Survey</h1>
-        <form action="https://script.google.com/macros/s/AKfycbzsNdBZX9-IECAE3Vah8VGuImVyLh8uTyE3fCnAj83chVPVxTFQrnJJFc3D1vKiuPXAWw/exec"method="POST">
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Email</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="email" name="Email[]" required></td>
-                        <td><input type="text" name="Name[]" required></td>
-                        <td><input type="tel" name="Phone[]" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <button type="button" onclick="addRow()">Add Another Row</button>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+<div class="container">
+    <h1>Denver Parking Survey</h1>
+    <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec" method="POST">
+        <input type="email" name="Email[]" placeholder="Enter email" required>
+        <input type="text" name="Name[]" placeholder="Enter name" required>
+        <input type="tel" name="Phone[]" placeholder="Enter phone (123-456-7890)" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+        <button type="button" onclick="addRow()">Add Another Person</button>
+        <button type="submit">Submit</button>
+    </form>
+</div>
 
-    <script>
-    function addRow() {
-        var table = document.getElementById("dataTable").getElementsByTagName('tbody')[0];
-        var newRow = table.insertRow();
-        newRow.innerHTML = '<td><input type="email" name="Email[]" required></td>' +
-                           '<td><input type="text" name="Name[]" required></td>' +
-                           '<td><input type="tel" name="Phone[]" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890"></td>';
-    }
-    </script>
+<script>
+function addRow() {
+    var form = document.querySelector('form');
+    form.insertAdjacentHTML('beforeend', `
+        <input type="email" name="Email[]" placeholder="Enter email" required>
+        <input type="text" name="Name[]" placeholder="Enter name" required>
+        <input type="tel" name="Phone[]" placeholder="Enter phone (123-456-7890)" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+    `);
+}
+</script>
 </body>
 </html>
