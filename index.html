@@ -16,24 +16,21 @@
         button:hover { background-color: #004494; }
         @media (max-width: 768px) { .container, input, button, iframe { width: 100%; } iframe { height: 300px; } }
     </style>
-   <script>
-    function addRow() {
-        var table = document.getElementById("dataTable");
-        var rowCount = table.rows.length;
-        var row = table.insertRow(rowCount);
-        for (let i = 0; i < table.rows[0].cells.length; i++) {
-            let cell = row.insertCell(i);
-            let inputType = 'text';  // Default type
-            let inputName = table.rows[0].cells[i].innerText;
-            if (inputName === 'Email') {
-                inputType = 'email';
-            } else if (inputName === 'Phone') {
-                inputType = 'tel';
-            }
-            cell.innerHTML = `<input type="${inputType}" name="${inputName}" required>`;
-        }
+ <script>
+function addRow() {
+    var table = document.getElementById("dataTable");
+    var newRow = table.insertRow(-1); // Adds a new row at the end of the table
+    var cells = table.rows[0].cells.length; // Number of cells in the first row
+
+    for (var i = 0; i < cells; i++) {
+        var newCell = newRow.insertCell(i);
+        var inputType = table.rows[0].cells[i].querySelector('input').type;
+        var inputName = table.rows[0].cells[i].querySelector('input').name;
+        newCell.innerHTML = `<input type="${inputType}" name="${inputName}" required>`;
     }
+}
 </script>
+
 </head>
 <body>
     <div class="container">
