@@ -30,6 +30,7 @@
         input, select {
             padding: 8px;
             margin-top: 4px;
+            box-sizing: border-box;
             width: 100%;
         }
         button {
@@ -41,6 +42,7 @@
         }
         .button-bar {
             text-align: right;
+            margin-top: 20px;
             margin-bottom: 10px;
         }
         .dropdown-content {
@@ -51,21 +53,25 @@
             border: 1px solid #ccc;
             padding: 5px;
             z-index: 1;
-            width: 100%; /* Ensures dropdown width matches button width */
+            width: 100%; /* Ensure width matches button */
         }
         .dropdown-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 5px;
-            cursor: pointer;
         }
         .dropdown-option:hover {
             background-color: #f1f1f1;
         }
         .checkmark {
-            float: right;
             visibility: hidden;
         }
         .checked .checkmark {
             visibility: visible;
+        }
+        input[type="button"] {
+            text-align: left;
         }
     </style>
 </head>
@@ -78,7 +84,7 @@
     </div>
     <h1>Denver Parking Survey</h1>
     <form action="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" method="POST" onsubmit="return handleSubmit();">
-        <table id="surveyTable">
+        <table>
             <thead>
                 <tr>
                     <th>4 Digit Map ID</th>
@@ -96,48 +102,78 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><input type="text" name="MapID[]"></td>
-                    <td><input type="text" name="PropertyName[]"></td>
-                    <td><select name="AssetType[]"><option value="">--Select--</option><option value="Surface Lot">Surface Lot</option><option value="Garage">Garage</option></select></td>
-                    <td><input type="text" name="Address[]"></td>
-                    <td><input type="button" value="Select Payment Options"></td>
-                    <td><input type="button" value="Select Space Types"></td>
-                    <td><select name="Access[]"><option value="">--Select--</option><option value="Public">Public</option><option value="Private">Private</option><option value="Both">Both</option></select></td>
-                    <td><input type="number" name="TotalSpaces[]"></td>
+                    <td><input type="text" name="MapID[]" required></td>
+                    <td><input type="text" name="PropertyName[]" required></td>
+                    <td>
+                        <select name="AssetType[]" required>
+                            <option value="">--Select--</option>
+                            <option value="Surface Lot">Surface Lot</option>
+                            <option value="Garage">Garage</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="Address[]" required></td>
+                    <td><input type="button" value="Select Payment Options" onclick="toggleDropdown(event, 'paymentOptionsDropdown')"></td>
+                    <td><input type="button" value="Select Space Types" onclick="toggleDropdown(event, 'spaceTypesDropdown')"></td>
+                    <td>
+                        <select name="Access[]" required>
+                            <option value="">--Select--</option>
+                            <option value="Public">Public</option>
+                            <option value="Private">Private</option>
+                            <option value="Both">Both</option>
+                        </select>
+                    </td>
+                    <td><input type="number" name="TotalSpaces[]" min="0" required></td>
                     <td><input type="checkbox" name="PARCSSystem[]"></td>
-                    <td><input type="text" name="Owner[]"></td>
-                    <td><input type="text" name="Operator[]"></td>
+                    <td><input type="text" name="Owner[]" required></td>
+                    <td><input type="text" name="Operator[]" required></td>
                 </tr>
             </tbody>
         </table>
-        <div style="text-align: center; margin-top: 20px;">
-            <button type="submit" id="submit-btn">Submit</button>
-        </div>
     </form>
 </div>
 
 <script>
 function handleSubmit() {
-    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-btn').disabled = true; // Prevent multiple submissions
     return true;
 }
 
+function toggleDropdown(event, dropdownId) {
+    event.stopPropagation();
+    var dropdown = document.getElementById(dropdownId);
+    var isVisible = dropdown.style.display === 'block';
+    document.querySelectorAll('.dropdown-content').forEach(function(content) {
+        content.style.display = 'none';
+    });
+    if (!isVisible) {
+        dropdown.style.display = 'block';
+    }
+}
+
+document.body.addEventListener('click', function(event) {
+    if (!event.target.matches('input[type="button"]')) {
+        document.querySelectorAll('.dropdown-content').forEach(function(content) {
+            content.style.display = 'none';
+        });
+    }
+});
+
 function addRow() {
-    var table = document.querySelector('#surveyTable tbody');
-    var newRow = table.insertRow(table.rows.length);
-    newRow.innerHTML = table.rows[0].innerHTML; // Copy the first input row
+    var table = document.querySelector('table tbody');
+    var newRow = table.insertRow(-1);
+    newRow.innerHTML = table.rows[0].innerHTML;
     resetInputs(newRow);
 }
 
 function deleteRow() {
-    var table = document.querySelector('#surveyTable tbody');
-    if (table.rows.length > 1) { // Prevent deleting all rows
-        table.deleteRow(table.rows.length - 1);
+    var table = document.querySelector('table tbody');
+    if (table.rows.length > 1) {
+        table.deleteRow(-1);
     }
 }
 
 function resetInputs(row) {
-    Array.from(row.querySelectorAll('input[type="text"], input[type="number"], select')).forEach(input => {
+    Array.from(row.querySelectorAll('input[type="text"], input[type="number"], select, input[type="checkbox"]')).forEach(input => {
         if (input.type === 'checkbox') {
             input.checked = false;
         } else {
@@ -151,3 +187,4 @@ function resetInputs(row) {
 </script>
 </body>
 </html>
+
