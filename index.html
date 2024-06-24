@@ -84,10 +84,12 @@
                 <tr>
                     <th>Email</th>
                     <th>Name</th>
+                    <th>Phone Number</th>
                 </tr>
                 <tr>
                     <td><input type="email" name="Email" required></td>
                     <td><input type="text" name="Name" required></td>
+                    <td><input type="tel" name="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required></td>
                 </tr>
             </table>
             <button type="submit">Send</button>
