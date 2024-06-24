@@ -8,7 +8,6 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            margin: 0;
             padding: 20px;
         }
         .container {
@@ -183,10 +182,12 @@ function toggleOption(element, dropdownName) {
     button.value = selectedOptions.join(', ');
 }
 
-document.addEventListener('click', function() {
-    document.querySelectorAll('.dropdown-content').forEach(function(dropdown) {
-        dropdown.style.display = 'none';
-    });
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('.dropdown-content')) {
+        document.querySelectorAll('.dropdown-content').forEach(function(dropdown) {
+            dropdown.style.display = 'none';
+        });
+    }
 });
 
 function addRow() {
