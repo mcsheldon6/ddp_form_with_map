@@ -15,26 +15,22 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 800px;
+            width: 95%;
             margin: auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
         }
-        input, select, button, .dropdown-content, .checkbox-content {
-            margin: 5px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        input, select, button {
             padding: 10px;
-            width: auto;
-            display: inline-block;
-        }
-        .dropdown-content, .checkbox-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
+            margin-top: 4px;
+            width: 95%;
         }
         button {
             background-color: #4CAF50;
@@ -45,53 +41,65 @@
         button:hover {
             background-color: #45a049;
         }
+        .dropdown-content, .checkbox-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Denver Parking Survey</h1>
-    <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec" method="POST">
-        <input type="text" name="MapID[]" placeholder="4 Digit Map ID" required>
-        <input type="text" name="PropertyName[]" placeholder="Property Name" required>
-        <div onclick="toggleDropdown(this)">
-            <input type="button" value="Select Asset Type">
-            <div class="dropdown-content">
-                <select name="AssetType[]">
-                    <option value="Surface Lot">Surface Lot</option>
-                    <option value="Garage">Garage</option>
-                </select>
-            </div>
-        </div>
-        <input type="text" name="Address[]" placeholder="Address" required>
-        <div onclick="toggleDropdown(this)">
-            <input type="button" value="Payment Options">
-            <div class="checkbox-content">
-                <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
-                <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
-                <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
-                <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile</label>
-            </div>
-        </div>
+    <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec/exec" method="POST">
+        <table>
+            <tr>
+                <th>4 Digit Map ID</th>
+                <th>Property Name</th>
+                <th>Select Asset Type</th>
+                <th>Address</th>
+                <th>Payment Options</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="MapID[]" required></td>
+                <td><input type="text" name="PropertyName[]" required></td>
+                <td>
+                    <select name="AssetType[]" required>
+                        <option value="">--Select--</option>
+                        <option value="Surface Lot">Surface Lot</option>
+                        <option value="Garage">Garage</option>
+                    </select>
+                </td>
+                <td><input type="text" name="Address[]" required></td>
+                <td onclick="toggleCheckboxDropdown(this, 'paymentOptions')">
+                    <input type="button" value="Choose">
+                    <div id="paymentOptions" class="checkbox-content">
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
+                        <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
         <button type="button" onclick="addRow()">Add Another Entry</button>
         <button type="submit">Submit</button>
     </form>
 </div>
 
 <script>
-function toggleDropdown(element) {
-    var content = element.querySelector('.dropdown-content, .checkbox-content');
+function toggleCheckboxDropdown(cell, dropdownId) {
+    var content = document.getElementById(dropdownId);
     content.style.display = content.style.display === 'block' ? 'none' : 'block';
 }
 
 function addRow() {
-    var container = document.querySelector('form');
-    var newElement = document.createElement('div');
-    newElement.innerHTML = `
-        <input type="text" name="MapID[]" placeholder="4 Digit Map ID" required>
-        <input type="text" name="PropertyName[]" placeholder="Property Name" required>
-        <!-- Repeat other fields as necessary -->
-    `;
-    container.insertBefore(newElement, container.children[container.children.length - 2]);
+    var table = document.querySelector('table');
+    var newRow = table.insertRow(-1);
+    newRow.innerHTML = table.rows[1].innerHTML; // Copy the first input row
 }
 </script>
 </body>
