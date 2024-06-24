@@ -47,14 +47,22 @@
             background-color: #f9f9f9;
             min-width: 160px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 5px;
             z-index: 1;
+        }
+        .checkbox-content label {
+            display: block;
+            cursor: pointer;
+        }
+        .checkbox-content input[type="checkbox"] {
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Denver Parking Survey</h1>
-    <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec/exec" method="POST">
+    <form action="https://script.google.com/macros/s/AKfycbw8PMuG0GjOzfxcjZEVTI5YSer-rDhLMdVZtLtsO-FL0epUxc5vUvNtECPzfpfNmOIv7g/exec" method="POST">
         <table>
             <tr>
                 <th>4 Digit Map ID</th>
@@ -62,6 +70,7 @@
                 <th>Select Asset Type</th>
                 <th>Address</th>
                 <th>Payment Options</th>
+                <th>Space Types</th>
             </tr>
             <tr>
                 <td><input type="text" name="MapID[]" required></td>
@@ -74,13 +83,25 @@
                     </select>
                 </td>
                 <td><input type="text" name="Address[]" required></td>
-                <td onclick="toggleCheckboxDropdown(this, 'paymentOptions')">
+                <td onclick="toggleDropdown(event, 'paymentOptions')">
                     <input type="button" value="Choose">
                     <div id="paymentOptions" class="checkbox-content">
                         <label><input type="checkbox" name="PaymentOptions[]" value="Cash"> Cash</label>
                         <label><input type="checkbox" name="PaymentOptions[]" value="Coins"> Coins</label>
                         <label><input type="checkbox" name="PaymentOptions[]" value="Credit Card"> Credit Card</label>
                         <label><input type="checkbox" name="PaymentOptions[]" value="Mobile Payment Provider"> Mobile</label>
+                    </div>
+                </td>
+                <td onclick="toggleDropdown(event, 'spaceTypes')">
+                    <input type="button" value="Choose">
+                    <div id="spaceTypes" class="checkbox-content">
+                        <label><input type="checkbox" name="SpaceTypes[]" value="ADA"> ADA</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="EV"> EV</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Carpool/Vanpool"> Carpool/Vanpool</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Motorcycle"> Motorcycle</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Bike Racks"> Bike Racks</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Secure Bike Parking"> Secure Bike Parking</label>
+                        <label><input type="checkbox" name="SpaceTypes[]" value="Loading"> Loading</label>
                     </div>
                 </td>
             </tr>
@@ -91,10 +112,24 @@
 </div>
 
 <script>
-function toggleCheckboxDropdown(cell, dropdownId) {
+function toggleDropdown(event, dropdownId) {
+    event.stopPropagation(); // Prevent the dropdown from closing when interacting with it
     var content = document.getElementById(dropdownId);
-    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    var isVisible = content.style.display === 'block';
+    // Close all dropdowns
+    document.querySelectorAll('.checkbox-content').forEach(function(div) {
+        div.style.display = 'none';
+    });
+    // Toggle the clicked dropdown
+    content.style.display = isVisible ? 'none' : 'block';
 }
+
+document.body.addEventListener('click', function() {
+    // Close all dropdowns when clicking outside
+    document.querySelectorAll('.checkbox-content').forEach(function(div) {
+        div.style.display = 'none';
+    });
+});
 
 function addRow() {
     var table = document.querySelector('table');
@@ -104,4 +139,3 @@ function addRow() {
 </script>
 </body>
 </html>
-
