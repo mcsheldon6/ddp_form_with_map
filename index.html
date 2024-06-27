@@ -29,7 +29,7 @@
         }
         input, select {
             padding: 8px;
-            margin: 8px 0; /* Add some margin to prevent overlap */
+            margin: 8px 0;
             box-sizing: border-box;
             width: 100%;
         }
@@ -56,7 +56,7 @@
             border: 1px solid #ccc;
             padding: 5px;
             z-index: 1;
-            width: auto; /* Adjusted to fit content */
+            width: auto;
         }
         .dropdown-option {
             display: flex;
@@ -96,7 +96,7 @@
                     <th>Asset Type</th>
                     <th>Address</th>
                     <th>Payment Options</th>
-                    <th>Space Types</th>
+                    <th>Space Types</th
                     <th>Access</th>
                     <th>Total # Spaces</th>
                     <th>PARCS System</th>
@@ -130,7 +130,7 @@
                             <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">1. ADA <span class="checkmark">✓</span></div>
                             <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">2. EV <span class="checkmark">✓</span></div>
                             <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">3. Motorcycle <span class="checkmark">✓</span></div>
-                        </div>
+                        </div
                     </td>
                     <td>
                         <select name="Access[]" required>
@@ -152,10 +152,9 @@
         </div>
     </form>
 </div>
-
 <script>
 function handleSubmit() {
-    document.getElementById('submit-btn').disabled = true; // Prevent multiple submissions
+    document.getElementById('submit-btn').disabled = true;
     return true;
 }
 
@@ -178,7 +177,7 @@ function toggleOption(element, dropdownName) {
     element.classList.toggle('checked');
     var button = element.closest('td').querySelector('input[type="button"]');
     var selectedOptions = Array.from(element.closest('.dropdown-content').querySelectorAll('.dropdown-option.checked'))
-        .map(option => option.textContent.split('.')[0].trim());
+        .map(option => option.textContent.trim().split('.')[0]);
     button.value = selectedOptions.join(', ');
 }
 
@@ -213,6 +212,12 @@ function resetInputs(row) {
         } else {
             input.value = '';
         }
+    });
+    Array.from(row.querySelectorAll('.dropdown-option')).forEach(option => {
+        option.classList.remove('checked');
+    });
+    row.querySelectorAll('input[type="button"]').forEach(button => {
+        button.value = "Select Options"; // Reset the button text to default
     });
 }
 </script>
