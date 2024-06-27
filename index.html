@@ -70,10 +70,8 @@
 </head>
 <body>
 <div class="container">
-    <div style="position: relative;">
-        <iframe frameborder="0" title="Felt Map" src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.75431%2C-105.01541%2C14z&legend=0&logo=1&link=1" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        <div class="zoom-highlight">Zoom Controls</div>
-    </div>
+    <iframe frameborder="0" title="Felt Map" src="https://felt.com/embed/map/Downtown-Denver-Parking-Study-Web-Map-HAmysBx9CRe9BV5cfTT8lqnB?loc=39.75431%2C-105.01541%2C14z&legend=0&logo=1&link=1" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    <div class="zoom-highlight">Zoom Controls</div>
     <div class="button-bar">
         <button onclick="addRow()" class="google-button">Add Row</button>
         <button onclick="deleteRow()" class="google-button">Delete Row</button>
@@ -109,19 +107,19 @@
                     </td>
                     <td><input type="text" name="Address[]" required></td>
                     <td>
-                        <input type="button" value="Select Payment Options" onclick="toggleDropdown(event, 'paymentOptionsDropdown', this)">
-                        <div id="paymentOptionsDropdown" class="dropdown-content">
-                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions')">1. Cash <span class="checkmark">✓</span></div>
-                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions')">2. Credit Card <span class="checkmark">✓</span></div>
-                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions')">3. Mobile Payment <span class="checkmark">✓</span></div>
+                        <input type="button" value="Select Payment Options" onclick="toggleDropdown(event, 'paymentOptionsDropdown1', this)">
+                        <div id="paymentOptionsDropdown1" class="dropdown-content">
+                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions1')">1. Cash <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions1')">2. Credit Card <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'paymentOptions1')">3. Mobile Payment <span class="checkmark">✓</span></div>
                         </div>
                     </td>
                     <td>
-                        <input type="button" value="Select Space Types" onclick="toggleDropdown(event, 'spaceTypesDropdown', this)">
-                        <div id="spaceTypesDropdown" class="dropdown-content">
-                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">1. ADA <span class="checkmark">✓</span></div>
-                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">2. EV <span class="checkmark">✓</span></div>
-                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes')">3. Motorcycle <span class="checkmark">✓</span></div>
+                        <input type="button" value="Select Space Types" onclick="toggleDropdown(event, 'spaceTypesDropdown1', this)">
+                        <div id="spaceTypesDropdown1" class="dropdown-content">
+                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes1')">1. ADA <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes1')">2. EV <span class="checkmark">✓</span></div>
+                            <div class="dropdown-option" onclick="toggleOption(this, 'spaceTypes1')">3. Motorcycle <span class="checkmark">✓</span></div>
                         </div
                     </td>
                     <td>
@@ -145,24 +143,69 @@
     </form>
 </div>
 <script>
+let rowCount = 1; // Initialize row count to manage unique IDs for dropdowns
+
 function handleSubmit() {
-    document.getElementById('submit-btn').disabled = true;
+    document.getElementById('submit-btn').disabled = true; // Prevent multiple submissions
     return true;
+}
+
+function addRow() {
+    var table = document.querySelector('#surveyTable tbody');
+    var newRow = table.insertRow(table.rows.length);
+    newRow.innerHTML = table.rows[0].innerHTML;
+    rowCount++;
+    updateRowIDs(newRow, rowCount);
+    resetInputs(newRow);
+}
+
+function updateRowIDs(row, index) {
+    // Update IDs and attributes to ensure they are unique per row
+    let dropdowns = row.querySelectorAll('.dropdown-content');
+    let buttons = row.querySelectorAll('input[type="button"]');
+    dropdowns.forEach((dropdown, idx) => {
+        let newId = dropdown.id.replace(/[0-9]+$/, '') + index; // Create new ID
+        dropdown.id = newId;
+        buttons[idx].setAttribute('onclick', `toggleDropdown(event, '${newId}', this)`);
+    });
+
+    let options = row.querySelectorAll('.dropdown-option');
+    options.forEach(option => {
+        let newDropdownName = option.getAttribute('onclick').match(/, '(\w+)/)[1].replace(/[0-9]+$/, '') + index;
+        option.setAttribute('onclick', `toggleOption(this, '${newDropdownName}')`);
+    });
+}
+
+function resetInputs(row) {
+    Array.from(row.querySelectorAll('input, select')).forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else if (input.tagName === 'SELECT') {
+            input.selectedIndex = 0;
+        } else {
+            input.value = '';
+        }
+    });
+    row.querySelectorAll('.dropdown-content .dropdown-option').forEach(option => {
+        option.classList.remove('checked'); // Ensure options are unchecked
+    });
+    row.querySelectorAll('input[type="button"]').forEach(button => {
+        button.value = "Select Options"; // Reset the button text to default
+    });
 }
 
 function toggleDropdown(event, dropdownId, button) {
     event.stopPropagation();
     var dropdown = document.getElementById(dropdownId);
-    if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-    } else {
-        document.querySelectorAll('.dropdown-content').forEach(function(content) {
-            content.style.display = 'none';
-        });
-        dropdown.style.display = 'block';
-        dropdown.style.left = button.getBoundingClientRect().left + 'px';
-        dropdown.style.top = button.getBoundingClientRect().bottom + window.scrollY + 'px';
-    }
+    var allDropdowns = document.querySelectorAll('.dropdown-content');
+    allDropdowns.forEach(d => {
+        if (d !== dropdown) {
+            d.style.display = 'none';
+        }
+    });
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    dropdown.style.left = button.getBoundingClientRect().left + 'px';
+    dropdown.style.top = button.getBoundingClientRect().bottom + window.scrollY + 'px';
 }
 
 function toggleOption(element, dropdownName) {
@@ -180,38 +223,6 @@ document.addEventListener('click', function(event) {
         });
     }
 });
-
-function addRow() {
-    var table = document.querySelector('#surveyTable tbody');
-    var newRow = table.insertRow(table.rows.length);
-    newRow.innerHTML = table.rows[0].innerHTML;
-    resetInputs(newRow);
-}
-
-function deleteRow() {
-    var table = document.querySelector('#surveyTable tbody');
-    if (table.rows.length > 1) {
-        table.deleteRow(table.rows.length - 1);
-    }
-}
-
-function resetInputs(row) {
-    Array.from(row.querySelectorAll('input, select')).forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else if (input.tagName === 'SELECT') {
-            input.selectedIndex = 0;
-        } else {
-            input.value = '';
-        }
-    });
-    Array.from(row.querySelectorAll('.dropdown-option')).forEach(option => {
-        option.classList.remove('checked');
-    });
-    row.querySelectorAll('input[type="button"]').forEach(button => {
-        button.value = "Select Options"; // Reset the button text to default
-    });
-}
 </script>
 </body>
 </html>
